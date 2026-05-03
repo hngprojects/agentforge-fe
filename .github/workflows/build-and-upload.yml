@@ -1,0 +1,44 @@
+name: Build and Upload
+
+on:
+  push:
+    branches: [staging, main]
+
+jobs:
+  build:
+    if: github.event.repository.fork == false
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      HOST: ${{ secrets.HOST }}
+      USERNAME: ${{ secrets.USERNAME }}
+      PASSWORD: ${{ secrets.PASSWORD }}
+
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: "23"
+
+    - name: Install pnpm
+      uses: pnpm/action-setup@v4
+      with:
+        version: 10
+
+    - name: Install dependencies
+      run: pnpm install
+
+    - name: Build Next.js application
+      run: pnpm build
+
+    - name: Archive production artifacts
+      run: tar -czf boilerplate.tar.gz .next
+
+    - name: Copy Artifacts to server
+      run: |
+        sshpass -p "$PASSWORD" scp -o StrictHostKeyChecking=no boilerplate.tar.gz "$USERNAME@$HOST:~/build-artifacts"
+        
+    - name: Delete zip file
+      run: rm -f boilerplate.tar.gz
