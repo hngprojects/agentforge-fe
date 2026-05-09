@@ -43,7 +43,8 @@ const UserCard = () => {
           {status === 'authenticated' && (
             <Avatar className="size-8 sm:size-10">
               <AvatarImage
-                src={`${session.user.image}?t=${Date.now()}`}
+                // src={`${session.user.image}?t=${Date.now()}`}
+                src={`${session.user.image}?t=`}
                 alt="User Avatar"
               />
               <AvatarFallback className="bg-primary/30 uppercase">

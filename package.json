@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "eslint .",
     "prepare": "husky",
     "turbo": "next dev --turbo",
     "format": "npm run lint -- --fix && npx prettier --write .",
@@ -37,11 +37,11 @@
     "framer-motion": "^12.0.6",
     "lenis": "^1.1.20",
     "lucide-react": "^0.474.0",
-    "next": "15.1.6",
+    "next": "16.2.6",
     "next-nprogress-bar": "^2.4.3",
-    "react": "^19.0.0",
+    "react": "19.2.6",
     "react-day-picker": "9.5.1",
-    "react-dom": "^19.0.0",
+    "react-dom": "19.2.6",
     "react-hook-form": "^7.54.2",
     "sonner": "^1.7.2",
     "swiper": "^11.2.1",
@@ -53,13 +53,12 @@
   "devDependencies": {
     "@commitlint/cli": "^19.6.1",
     "@commitlint/config-conventional": "^19.6.0",
-    "@eslint/eslintrc": "^3.2.0",
     "@types/cors": "^2.8.17",
     "@types/node": "^22.10.10",
-    "@types/react": "^19.0.8",
-    "@types/react-dom": "^19.0.3",
+    "@types/react": "19.2.14",
+    "@types/react-dom": "19.2.3",
     "eslint": "^9.19.0",
-    "eslint-config-next": "15.1.6",
+    "eslint-config-next": "16.2.6",
     "husky": "^9.1.7",
     "lint-staged": "^15.4.3",
     "postcss": "^8.5.1",
@@ -67,5 +66,9 @@
     "prettier-plugin-tailwindcss": "^0.6.11",
     "tailwindcss": "^3.4.17",
     "typescript": "^5.7.3"
+  },
+  "overrides": {
+    "@types/react": "19.2.14",
+    "@types/react-dom": "19.2.3"
   }
 }
