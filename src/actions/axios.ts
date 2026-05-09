@@ -1,12 +1,12 @@
 import axios, { AxiosInstance } from 'axios'
 
+axios.defaults.withCredentials = true
+
 const Calls = (baseURL?: string): AxiosInstance => {
   return axios.create({
     baseURL,
     headers: {
       'Content-Type': 'application/json; charset=UTF-8',
-      'Access-Control-Allow-Origin': '*',
-      credentials: 'include',
     },
   })
 }
@@ -19,7 +19,6 @@ const CallsWithBearer = (
     baseURL,
     headers: {
       'Content-Type': 'application/json; charset=UTF-8',
-      'Access-Control-Allow-Origin': '*',
       Authorization: `Bearer ${authorization}`,
     },
   })
