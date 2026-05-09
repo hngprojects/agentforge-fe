@@ -5,7 +5,7 @@ import { Label } from '~/components/ui/label'
 export default function LoginPage() {
   return (
     <div className="flex min-h-screen items-center justify-center p-4">
-      <div className="w-full max-w-md space-y-6 rounded-lg border p-8 shadow-sm">
+      <div className="w-full max-w-md space-y-6 rounded-lg border p-8 shadow-xs">
         <div className="text-center">
           <h1 className="text-2xl font-bold">Login</h1>
           <p className="text-sm text-muted-foreground">

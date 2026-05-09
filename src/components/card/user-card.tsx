@@ -62,7 +62,7 @@ const UserCard = () => {
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="mr-1 w-56" align="end">
-        <DropdownMenuLabel className="pb-0 pt-3">
+        <DropdownMenuLabel className="pt-3 pb-0">
           {session?.user?.first_name} {session?.user?.last_name}
         </DropdownMenuLabel>
         <span className="text-neutral-dark-1 block px-2 pb-1 text-xs">
