@@ -5,8 +5,6 @@
  */
 export const publicRoutes: string[] = [
   '/',
-  '/career',
-  '/faqs',
   'privacy-policy',
   '/terms',
   '/about-us',
@@ -25,7 +23,7 @@ export const authRoutes = [
   '/recovery',
 ]
 
-export const superAdminRoutes = ['dashboard/admin/faqs']
+export const superAdminRoutes = ['dashboard/admin']
 
 export const apiAuthPrefix = '/api/'
 
