@@ -9,6 +9,10 @@ on:
     branches:
       - main
 
+concurrency:
+  group: deploy-frontend-production
+  cancel-in-progress: false
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -16,7 +20,7 @@ jobs:
 
     environment:
       name: "production"
-      url: "https://agent-forge"
+      url: "https://agent-forge.hng14.com"
 
     steps:
       - name: Download build artifact
@@ -29,14 +33,14 @@ jobs:
 
       - name: Decode and create .env file
         run: |
-          echo "${{ secrets.ENV_BASE64 }}" | base64 -d > .env
+          echo "${{ secrets.PROD_ENV_BASE64 }}" | base64 -d > .env
 
       - name: Copy to server
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
-          password: ${{ secrets.PASSWORD }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
           source: ".env,agentforge-build.tar.gz"
           target: "~/agentforge/frontend/production"
 
@@ -44,14 +48,56 @@ jobs:
         run: rm -f agentforge-build.tar.gz .env
 
       - name: Deploy on server
-        uses: appleboy/ssh-action@v1.2.1
+        uses: appleboy/ssh-action@v1.2.5
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
-          password: ${{ secrets.PASSWORD }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script_stop: true
           script: |
+            set -e
+
+            echo "=== Deploying Frontend Production ==="
             cd ~/agentforge/frontend/production
+
+            # Extract build artifacts
             tar -xzf agentforge-build.tar.gz
             rm -f agentforge-build.tar.gz
+
+            # Install production dependencies
             pnpm install --prod
-            pm2 restart frontend-production --update-env
+
+            # Snapshot PM2 state for rollback
+            pm2 save || true
+
+            # Restart application
+            echo "=== Starting PM2 Process ==="
+            if pm2 describe frontend-production > /dev/null 2>&1; then
+              pm2 restart frontend-production --update-env
+            else
+              pm2 start "pnpm start" --name frontend-production
+            fi
+
+            # Health check with retry
+            echo "=== Running Health Check ==="
+            MAX_RETRIES=15
+            RETRY_COUNT=0
+
+            while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
+              if curl -sf "http://localhost:3001/" > /dev/null 2>&1; then
+                echo "✅ Health check passed after $((RETRY_COUNT + 1)) attempt(s)"
+                break
+              fi
+              RETRY_COUNT=$((RETRY_COUNT + 1))
+              echo "⏳ Health check attempt ${RETRY_COUNT}/${MAX_RETRIES} failed, retrying in 2s..."
+              sleep 2
+            done
+
+            if [ $RETRY_COUNT -eq $MAX_RETRIES ]; then
+              echo "❌ Health check failed. Rolling back..."
+              pm2 resurrect || pm2 start "pnpm start" --name frontend-production
+              echo "❌ Deployment FAILED - health check did not pass."
+              exit 1
+            fi
+
+            echo "=== Frontend Production Deployment Complete ==="
