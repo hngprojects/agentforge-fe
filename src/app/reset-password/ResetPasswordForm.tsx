@@ -84,7 +84,7 @@ export function ResetPasswordForm({
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+      <form onSubmit={form.handleSubmit(onSubmit)}>
         <FormField
           control={form.control}
           name="password"
@@ -92,7 +92,7 @@ export function ResetPasswordForm({
             <FormItem>
               <FormLabel>Password</FormLabel>
               <FormControl>
-                <InputGroup className="h-12">
+                <InputGroup className="mt-1.5 h-12">
                   <InputGroupInput
                     type={showPassword}
                     placeholder="Enter new password"
@@ -100,7 +100,7 @@ export function ResetPasswordForm({
                   />
                   <InputGroupAddon>
                     <InputGroupText>
-                      <Lock className="size-4" />
+                      <Lock className="size-4 text-foreground" />
                     </InputGroupText>
                   </InputGroupAddon>
                   <InputGroupAddon align="inline-end">
@@ -128,17 +128,17 @@ export function ResetPasswordForm({
           control={form.control}
           name="confirmPassword"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="mt-8">
               <FormLabel>Confirm Password</FormLabel>
               <FormControl>
-                <InputGroup className="h-12">
+                <InputGroup className="mt-1.5 h-12">
                   <InputGroupInput
                     type={showConfirmPassword}
                     placeholder="Confirm new password"
                     {...field}
                   />
                   <InputGroupAddon>
-                    <Lock className="size-4" />
+                    <Lock className="size-4 text-foreground" />
                   </InputGroupAddon>
                   <InputGroupAddon align="inline-end">
                     <InputGroupButton
@@ -161,7 +161,7 @@ export function ResetPasswordForm({
             </FormItem>
           )}
         />
-        <Button type="submit" className="h-auto w-full py-3">
+        <Button type="submit" className="mt-12 h-auto w-full py-3">
           Continue
         </Button>
       </form>
