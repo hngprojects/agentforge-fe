@@ -16,18 +16,47 @@ concurrency:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    if: |
+      (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main') ||
+      github.event.workflow_run.conclusion == 'success'
 
     environment:
       name: "production"
       url: "https://agent-forge.hng14.com"
 
     steps:
+      - name: Resolve build run ID
+        id: resolve-run
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "Manual trigger detected — looking up latest successful build run on main..."
+            RUN_ID=$(gh run list \
+              --repo "${{ github.repository }}" \
+              --workflow="build-and-upload.yml" \
+              --branch=main \
+              --status=success \
+              --limit=1 \
+              --json databaseId \
+              --jq '.[0].databaseId')
+
+            if [ -z "$RUN_ID" ] || [ "$RUN_ID" = "null" ]; then
+              echo "❌ No successful 'Build and Upload' run found on main. Push a commit to main first."
+              exit 1
+            fi
+            echo "✅ Resolved run ID: $RUN_ID"
+            echo "run_id=$RUN_ID" >> "$GITHUB_OUTPUT"
+          else
+            echo "Automated trigger — using workflow_run ID: ${{ github.event.workflow_run.id }}"
+            echo "run_id=${{ github.event.workflow_run.id }}" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Download build artifact
         uses: actions/download-artifact@v4
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          run-id: ${{ github.event.workflow_run.id }}
+          run-id: ${{ steps.resolve-run.outputs.run_id }}
           name: agentforge-build
           path: .
 
@@ -65,7 +94,10 @@ jobs:
             rm -f agentforge-build.tar.gz
 
             # Install production dependencies
-            pnpm install --prod
+            # --ignore-scripts prevents lifecycle hooks (e.g. husky prepare) from
+            # running on the server. devDependencies are skipped in --prod mode, so
+            # any hook that depends on them (like husky) would crash the install.
+            pnpm install --prod --ignore-scripts
 
             # Snapshot PM2 state for rollback
             pm2 save || true
