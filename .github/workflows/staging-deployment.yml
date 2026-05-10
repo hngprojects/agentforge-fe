@@ -1,13 +1,10 @@
 name: Staging Deployment
-
 on:
   workflow_dispatch:
   workflow_run:
     workflows: ["Build and Upload"]
     types:
       - completed
-    branches:
-      - staging
 
 concurrency:
   group: deploy-frontend-staging

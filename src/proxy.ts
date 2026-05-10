@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from 'next/server'
 
 const AUTH_ROUTES = ['/login', '/register']
 const PUBLIC_ROUTES = [
-  '/',
   '/login',
   '/register',
   '/verify-email',
@@ -10,15 +9,17 @@ const PUBLIC_ROUTES = [
   '/auth/google/callback',
 ]
 
-export default async function middleware(request: NextRequest) {
+export default async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
   const refreshToken = request.cookies.get('refresh_token')?.value
 
   const isAuthRoute = AUTH_ROUTES.some((r) => pathname.startsWith(r))
-  const isPublicRoute = PUBLIC_ROUTES.some((r) => pathname.startsWith(r))
+  const isPublicRoute =
+    pathname === '/' ||
+    PUBLIC_ROUTES.filter((r) => r !== '/').some((r) => pathname.startsWith(r))
 
   if (refreshToken && isAuthRoute) {
-    return NextResponse.redirect(new URL('/dashboard', request.url))
+    return NextResponse.redirect(new URL('/generator', request.url))
   }
 
   if (!refreshToken && !isPublicRoute) {
