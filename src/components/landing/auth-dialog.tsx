@@ -1,7 +1,6 @@
 'use client'
 
 import { Github } from 'lucide-react'
-import Image from 'next/image'
 import Link from 'next/link'
 import * as React from 'react'
 
@@ -96,7 +95,9 @@ export function AuthDialog({ trigger }: AuthDialogProps) {
             <Button
               variant="outline"
               className="group h-14 w-full gap-4 rounded-2xl border-[#E5E7EB] text-base font-semibold transition-all duration-200 hover:border-[#D1D5DB] hover:bg-[#F9FAFB]"
-              onClick={() => {}}
+              onClick={() => {
+                window.location.href = '/api/auth/google'
+              }}
             >
               <GoogleLogo className="h-6 w-6 transition-transform group-hover:scale-105" />
               <span>Continue with Google</span>
@@ -105,7 +106,9 @@ export function AuthDialog({ trigger }: AuthDialogProps) {
             <Button
               variant="outline"
               className="group h-14 w-full gap-4 rounded-2xl border-[#E5E7EB] text-base font-semibold transition-all duration-200 hover:border-[#D1D5DB] hover:bg-[#F9FAFB]"
-              onClick={() => {}}
+              onClick={() => {
+                window.location.href = '/api/auth/github'
+              }}
             >
               <Github className="h-6 w-6 transition-transform group-hover:scale-105" />
               <span>Continue with GitHub</span>
