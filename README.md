@@ -11,22 +11,22 @@ In order to run this app locally, you should have the following programs install
 - [nodejs](https://nodejs.org/)>=20.0.0
 - [pnpm](https://yarnpkg.com/)>=9.4.0
 
-#### Clone this repository
+### Clone this repository
 
-```
+```bash
 git clone git@github.com/hngprojects/hng_boilerplate_nextjs.git
 cd hng_boilerplate_nextjs
 ```
 
-#### Install dependencies
+### Install dependencies
 
-```
+```bash
 pnpm install
 ```
 
-#### Start the server
+### Start the server
 
-```
+```bash
 pnpm dev
 ```
 
