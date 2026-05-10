@@ -168,7 +168,7 @@ export function ResetPasswordForm({
         <Button
           disabled={isSubmiting}
           type="submit"
-          className="mt-12 h-auto w-full py-4"
+          className="mt-12 h-12 w-full py-2.5"
         >
           {isSubmiting ? (
             <div className="flex items-center gap-1.5">
