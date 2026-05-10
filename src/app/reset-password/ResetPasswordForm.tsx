@@ -27,6 +27,9 @@ export function ResetPasswordForm() {
   const [showPassword, setShowPassword] = useState<'password' | 'text'>(
     'password'
   )
+  const [showConfirmPassword, setShowConfirmPassword] = useState<
+    'password' | 'text'
+  >('password')
 
   const form = useForm<ResetPasswordData>({
     resolver: zodResolver(resetPasswordSchema),
@@ -46,6 +49,14 @@ export function ResetPasswordForm() {
     setShowPassword((prev) => (prev === 'password' ? 'text' : 'password'))
   }
 
+  function handleShowConfirmPassword(e: React.MouseEvent<HTMLButtonElement>) {
+    e.preventDefault()
+    e.stopPropagation()
+    setShowConfirmPassword((prev) =>
+      prev === 'password' ? 'text' : 'password'
+    )
+  }
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -54,9 +65,9 @@ export function ResetPasswordForm() {
           name="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>New Password</FormLabel>
+              <FormLabel>Password</FormLabel>
               <FormControl>
-                <InputGroup>
+                <InputGroup className="h-12">
                   <InputGroupInput
                     type={showPassword}
                     placeholder="Enter new password"
@@ -69,6 +80,7 @@ export function ResetPasswordForm() {
                   </InputGroupAddon>
                   <InputGroupAddon align="inline-end">
                     <InputGroupButton
+                      className="hover:bg-transparent"
                       size="icon-xs"
                       aria-label="show password"
                       title="show password"
@@ -94,9 +106,9 @@ export function ResetPasswordForm() {
             <FormItem>
               <FormLabel>Confirm Password</FormLabel>
               <FormControl>
-                <InputGroup>
+                <InputGroup className="h-12">
                   <InputGroupInput
-                    type={showPassword}
+                    type={showConfirmPassword}
                     placeholder="Confirm new password"
                     {...field}
                   />
@@ -105,12 +117,13 @@ export function ResetPasswordForm() {
                   </InputGroupAddon>
                   <InputGroupAddon align="inline-end">
                     <InputGroupButton
+                      className="hover:bg-transparent"
                       size="icon-xs"
                       aria-label="show password"
                       title="show password"
-                      onClick={handleShowPassword}
+                      onClick={handleShowConfirmPassword}
                     >
-                      {showPassword === 'password' ? (
+                      {showConfirmPassword === 'password' ? (
                         <Eye className="size-4" />
                       ) : (
                         <EyeOff className="size-4" />
@@ -123,7 +136,7 @@ export function ResetPasswordForm() {
             </FormItem>
           )}
         />
-        <Button type="submit" className="w-full">
+        <Button type="submit" className="h-auto w-full py-3">
           Continue
         </Button>
       </form>
