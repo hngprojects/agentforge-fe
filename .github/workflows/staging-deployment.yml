@@ -16,8 +16,9 @@ concurrency:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    # workflow_dispatch has no built-in branch filter — GitHub lets users pick any
     if: |
-      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/staging') ||
       github.event.workflow_run.conclusion == 'success'
 
     environment:
