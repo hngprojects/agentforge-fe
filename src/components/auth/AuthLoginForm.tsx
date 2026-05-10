@@ -29,13 +29,21 @@ export const AuthLoginForm = () => {
   } = useForm<LoginInput>({ resolver: zodResolver(LoginSchema) })
 
   const emailValue = watch('email', '')
+<<<<<<< HEAD
   const emailValid =
     !errors.email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailValue ?? '')
+=======
+  const emailValid = !errors.email && emailValue && emailValue.length > 0
+>>>>>>> b582f36 (refactor(auth): componentize auth pages and update styling)
 
   const onSubmit = async (data: LoginInput) => {
     setServerError(null)
     try {
       await login(data)
+<<<<<<< HEAD
+=======
+      // TODO: Implement remember-me functionality
+>>>>>>> b582f36 (refactor(auth): componentize auth pages and update styling)
       router.push('/generator')
     } catch (err: unknown) {
       if (err instanceof AxiosError) {
