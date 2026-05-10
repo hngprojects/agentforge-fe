@@ -1,4 +1,3 @@
-import axios from 'axios'
 import { createContext, useCallback, useContext, useMemo } from 'react'
 import { z } from 'zod'
 
@@ -8,6 +7,8 @@ import { AUTH_PROVIDERS, AuthProviders } from '~/constants/authProviders'
 import { tokenStore } from '~/utils/token'
 import { handleError } from '~/lib/utils/handleError'
 import { LoginSchema, RegisterSchema } from '~/schemas/auth'
+import { login, register, logout as logoutApi, getMe } from '~/lib/api/auth'
+import { useAuthStore } from '~/stores/auth-store'
 
 type LoginCredentials = z.infer<typeof LoginSchema>
 type RegisterCredentials = z.infer<typeof RegisterSchema>
@@ -26,7 +27,6 @@ type AuthContextType = {
   }) => Promise<APIResult<MessageResponse>>
 
   loginWithProvider: (provider: AuthProviders) => void
-
   logout: () => Promise<void>
 }
 
@@ -36,7 +36,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL
   if (!baseURL) throw new Error('NEXT_PUBLIC_API_BASE_URL is not set')
 
-  //register returns a message that a message has been sent to email
+  // ← pull actions from store
+  const { setAccessToken, setUser, clear } = useAuthStore()
+
   const registerUser = useCallback(
     async ({
       registerCredentials,
@@ -45,25 +47,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }): Promise<APIResult<MessageResponse>> => {
       try {
         RegisterSchema.parse(registerCredentials)
-        const response = await axios.post(`${baseURL}/api/v1/auth/register`, {
-          registerCredentials,
-        })
-        const result = response.data
-        return {
-          success: true,
-          data: result,
-        }
+        const result = await register(registerCredentials)
+        return { success: true, data: result }
       } catch (error) {
-        return {
-          success: false,
-          error: handleError(error),
-        }
+        return { success: false, error: handleError(error) }
       }
     },
     []
   )
 
-  // login returns the
   const loginUser = useCallback(
     async ({
       loginCredentials,
@@ -72,29 +64,30 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }): Promise<APIResult<TokenResponse>> => {
       try {
         LoginSchema.parse(loginCredentials)
-        const response = await axios.post(`${baseURL}/api/v1/auth/login`, {
-          loginCredentials,
-        })
+        const result = await login(loginCredentials)
 
-        const result: TokenResponse = response.data
-        tokenStore.setAccessToken(response.data.access_token)
-        return {
-          success: true,
-          data: result,
-        }
+        tokenStore.setAccessToken(result.access_token)
+        setAccessToken(result.access_token)
+
+        const user = await getMe()
+        setUser(user)
+
+        return { success: true, data: result }
       } catch (error) {
-        return {
-          success: false,
-          error: handleError(error),
-        }
+        return { success: false, error: handleError(error) }
       }
     },
-    []
+    [setAccessToken, setUser]
   )
 
   const logout = useCallback(async () => {
-    tokenStore.clearAccessToken()
-  }, [])
+    try {
+      await logoutApi()
+    } finally {
+      tokenStore.clearAccessToken() // ← clears cookie (for middleware)
+      clear()                        // ← clears zustand store (token + user + isAuthenticated)
+    }
+  }, [clear])
 
   const loginWithProvider = useCallback((provider: AuthProviders) => {
     const validProviders = Object.values(AUTH_PROVIDERS)
@@ -102,7 +95,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       console.error(`Invalid provider: ${provider}`)
       return
     }
-
     window.location.href = `${baseURL}/api/v1/auth/${provider}`
   }, [])
 
