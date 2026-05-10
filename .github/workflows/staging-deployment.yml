@@ -16,7 +16,9 @@ concurrency:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    if: |
+      github.event_name == 'workflow_dispatch' ||
+      github.event.workflow_run.conclusion == 'success'
 
     environment:
       name: "staging"
@@ -34,6 +36,33 @@ jobs:
     - name: Decode and create .env file
       run: |
         echo "${{ secrets.STAGING_ENV_BASE64 }}" | base64 -d > .env
+
+    - name: Debug SSH key format
+      run: |
+        KEY="${{ secrets.SSH_PRIVATE_KEY }}"
+        FIRST_LINE=$(echo "$KEY" | head -1)
+        LAST_LINE=$(echo "$KEY" | tail -1)
+        LINE_COUNT=$(echo "$KEY" | wc -l)
+
+        echo "--- SSH Key Diagnostics ---"
+        echo "First line : $FIRST_LINE"
+        echo "Last line  : $LAST_LINE"
+        echo "Line count : $LINE_COUNT"
+
+        # Fail fast with a clear message if the key header is wrong
+        if [[ "$FIRST_LINE" != "-----BEGIN"* ]]; then
+          echo "❌ SSH key does not start with '-----BEGIN'. Key was likely pasted incorrectly or is corrupted."
+          exit 1
+        fi
+        if [[ "$LAST_LINE" != "-----END"* ]]; then
+          echo "❌ SSH key does not end with '-----END'. Key may be truncated or missing a trailing newline."
+          exit 1
+        fi
+        if [ "$LINE_COUNT" -lt 3 ]; then
+          echo "❌ SSH key has fewer than 3 lines — it is almost certainly malformed."
+          exit 1
+        fi
+        echo "✅ SSH key format looks valid."
 
     - name: Copy to server
       uses: appleboy/scp-action@v0.1.7
