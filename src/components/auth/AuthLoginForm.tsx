@@ -30,20 +30,28 @@ export const AuthLoginForm = () => {
 
   const emailValue = watch('email', '')
 <<<<<<< HEAD
+<<<<<<< HEAD
   const emailValid =
     !errors.email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailValue ?? '')
 =======
   const emailValid = !errors.email && emailValue && emailValue.length > 0
 >>>>>>> b582f36 (refactor(auth): componentize auth pages and update styling)
+=======
+  const emailValid = !errors.email && emailValue && emailValue.length > 0
+>>>>>>> 99e35bd (refactor(auth): componentize auth pages and update styling)
 
   const onSubmit = async (data: LoginInput) => {
     setServerError(null)
     try {
       await login(data)
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
       // TODO: Implement remember-me functionality
 >>>>>>> b582f36 (refactor(auth): componentize auth pages and update styling)
+=======
+      // TODO: Implement remember-me functionality
+>>>>>>> 99e35bd (refactor(auth): componentize auth pages and update styling)
       router.push('/generator')
     } catch (err: unknown) {
       if (err instanceof AxiosError) {

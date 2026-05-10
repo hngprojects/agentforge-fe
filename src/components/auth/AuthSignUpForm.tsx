@@ -11,10 +11,14 @@ import { RegisterSchema, type RegisterInput } from '@/schemas/auth'
 import { useAuth } from '@/hooks/useAuth'
 import { parseApiError } from '@/lib/api/error'
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { AuthOAuthSignUpButtons } from './AuthOAuthButtonsSignUp'
 =======
 import { AuthOAuthButtons } from './AuthOAuthButtons'
 >>>>>>> b582f36 (refactor(auth): componentize auth pages and update styling)
+=======
+import { AuthOAuthButtons } from './AuthOAuthButtons'
+>>>>>>> 99e35bd (refactor(auth): componentize auth pages and update styling)
 import { LuEyeClosed } from 'react-icons/lu'
 
 const PW_RULES = [
@@ -227,10 +231,14 @@ export const AuthSignUpForm = () => {
               className="absolute top-1/2 right-3 -translate-y-1/2 text-gray-400 hover:text-gray-600"
             >
 <<<<<<< HEAD
+<<<<<<< HEAD
               {showPw ? <Eye size={14} /> : <LuEyeClosed size={14} />}
 =======
               {showConfirm ? <Eye size={14} /> : <LuEyeClosed size={14} />}
 >>>>>>> b582f36 (refactor(auth): componentize auth pages and update styling)
+=======
+              {showConfirm ? <Eye size={14} /> : <LuEyeClosed size={14} />}
+>>>>>>> 99e35bd (refactor(auth): componentize auth pages and update styling)
             </button>
           </div>
           {errors.confirmPassword && (
@@ -270,10 +278,14 @@ export const AuthSignUpForm = () => {
       {/* OAuth */}
       <div className="mt-4">
 <<<<<<< HEAD
+<<<<<<< HEAD
         <AuthOAuthSignUpButtons />
 =======
         <AuthOAuthButtons />
 >>>>>>> b582f36 (refactor(auth): componentize auth pages and update styling)
+=======
+        <AuthOAuthButtons />
+>>>>>>> 99e35bd (refactor(auth): componentize auth pages and update styling)
       </div>
 
       {/* Sign in */}

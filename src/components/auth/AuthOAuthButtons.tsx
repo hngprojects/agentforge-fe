@@ -13,6 +13,7 @@ export const AuthOAuthButtons = () => {
       {/* OR divider */}
       <div className="flex items-center gap-3">
 <<<<<<< HEAD
+<<<<<<< HEAD
         <div className="flex-1 bg-gray-200" />
         <span className="text-xs font-bold text-black">OR</span>
         <div className="flex-1 bg-gray-200" />
@@ -21,6 +22,11 @@ export const AuthOAuthButtons = () => {
         <span className="content-center text-xs font-bold text-black">OR</span>
         <div className="h-px flex-1 bg-gray-200" />
 >>>>>>> b582f36 (refactor(auth): componentize auth pages and update styling)
+=======
+        <div className="h-px flex-1 bg-gray-200" />
+        <span className="content-center text-xs font-bold text-black">OR</span>
+        <div className="h-px flex-1 bg-gray-200" />
+>>>>>>> 99e35bd (refactor(auth): componentize auth pages and update styling)
       </div>
 
       {/* Buttons */}

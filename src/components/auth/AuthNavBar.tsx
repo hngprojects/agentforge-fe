@@ -1,7 +1,10 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 import React from 'react'
 =======
 >>>>>>> b582f36 (refactor(auth): componentize auth pages and update styling)
+=======
+>>>>>>> 99e35bd (refactor(auth): componentize auth pages and update styling)
 import Link from 'next/link'
 
 export const AuthNavBar = () => {
@@ -30,12 +33,17 @@ export const AuthNavBar = () => {
         </div>
         <span className="text-xl leading-none font-bold">
 <<<<<<< HEAD
+<<<<<<< HEAD
           <span style={{ color: '#0C0E0D' }}>AGENT</span>
           <span style={{ color: '#005F5A' }}>FORGE</span>
 =======
           <span className="text-[#0C0E0D]">AGENT</span>
           <span className="text-[#005F5A]">FORGE</span>
 >>>>>>> b582f36 (refactor(auth): componentize auth pages and update styling)
+=======
+          <span className="text-[#0C0E0D]">AGENT</span>
+          <span className="text-[#005F5A]">FORGE</span>
+>>>>>>> 99e35bd (refactor(auth): componentize auth pages and update styling)
         </span>
       </Link>
     </header>
