@@ -25,9 +25,6 @@ jobs:
       url: "https://staging.agent-forge.hng14.com"
 
     steps:
-    # When triggered by workflow_run, the run ID is available directly.
-    # When triggered manually (workflow_dispatch), we must look up the latest
-    # successful "Build and Upload" run on the staging branch via the GitHub API.
     - name: Resolve build run ID
       id: resolve-run
       env:
