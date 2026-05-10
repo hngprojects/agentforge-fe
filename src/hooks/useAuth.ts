@@ -1,10 +1,11 @@
-// lib/hooks/use-auth.ts
 'use client'
 
 import { useCallback, useEffect, useRef } from 'react'
+import { useRouter } from 'next/navigation'
 import { useAuthStore } from '@/stores/auth-store'
 import { login, logout, register, getMe, refresh } from '@/lib/api/auth'
 import type { LoginInput, RegisterInput } from '@/schemas/auth'
+import { AxiosError } from 'axios'
 
 /**
  * Primary auth hook. Use this in all client components — never call the API
@@ -28,9 +29,9 @@ import type { LoginInput, RegisterInput } from '@/schemas/auth'
  * <button onClick={logout}>Sign out</button>
  */
 export function useAuth() {
+  const router = useRouter()
   const { accessToken, user, isAuthenticated, setAccessToken, setUser, clear } =
     useAuthStore()
-
   const hydrated = useRef(false)
 
   useEffect(() => {
@@ -43,10 +44,16 @@ export function useAuth() {
         return getMe()
       })
       .then(setUser)
-      .catch(() => {
+      .catch((err: unknown) => {
         clear()
+        // If the refresh cookie belongs to an unverified account, the backend
+        // returns 403. Send them to confirm-email; they have no email to pass
+        // here since we don't store it, so just redirect without the param.
+        if (err instanceof AxiosError && err.response?.status === 403) {
+          router.push('/confirm-email')
+        }
       })
-  }, [isAuthenticated, setAccessToken, setUser, clear])
+  }, [isAuthenticated, setAccessToken, setUser, clear, router])
 
   const handleRegister = useCallback(async (data: RegisterInput) => {
     return register(data)

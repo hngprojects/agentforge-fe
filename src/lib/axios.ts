@@ -4,9 +4,9 @@ const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000'
 
 // Public client — no auth, used for login/register/refresh calls
 export const publicClient = axios.create({
-  baseURL: `${BACKEND_URL}/api/v1`,
+  baseURL: '/api', // hits Next.js routes above
   headers: { 'Content-Type': 'application/json' },
-  withCredentials: true, // sends the HttpOnly refresh_token cookie
+  withCredentials: true,
 })
 
 // Auth client — injects access token, silently refreshes on 401
@@ -19,19 +19,19 @@ export const authClient = axios.create({
 // Lazy import to avoid circular deps (store imports axios, axios imports store)
 function getAccessToken(): string | null {
   // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const { useAuthStore } = require('@/lib/stores/auth-store')
+  const { useAuthStore } = require('@/stores/auth-store')
   return useAuthStore.getState().accessToken
 }
 
 function setAccessToken(token: string): void {
   // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const { useAuthStore } = require('@/lib/stores/auth-store')
+  const { useAuthStore } = require('@/stores/auth-store')
   useAuthStore.getState().setAccessToken(token)
 }
 
 function clearAuth(): void {
   // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const { useAuthStore } = require('@/lib/stores/auth-store')
+  const { useAuthStore } = require('@/stores/auth-store')
   useAuthStore.getState().clear()
 }
 
@@ -100,7 +100,6 @@ authClient.interceptors.response.use(
     } catch (refreshError) {
       processQueue(refreshError, null)
       clearAuth()
-      // Redirect to login — works in client components
       if (typeof window !== 'undefined') {
         window.location.href = '/login'
       }
