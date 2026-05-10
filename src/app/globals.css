@@ -253,10 +253,24 @@
     --fg-muted: 240 4% 34%;
     --bg-subtle: 0 0% 98%;
   }
-}
 
-input:-webkit-autofill {
-  background-color: transparent !important;
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus {
+    -webkit-text-fill-color: inherit !important;
+    -webkit-box-shadow: 0 0 0px 1000px hsl(180 6% 97%) inset !important;
+    transition: background-color 5000s ease-in-out 0s;
+  }
+
+  button:not(:disabled),
+  [role='button']:not(:disabled) {
+    cursor: pointer;
+    opacity: 1;
+  }
+
+  input[type='password']::-ms-reveal {
+    display: none;
+  }
 }
 
 .show_scrollbar::-webkit-scrollbar {

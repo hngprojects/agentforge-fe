@@ -26,24 +26,21 @@ export default function ResetPasswordPage() {
   }
 
   return (
-    <div className="min-h-svh p-4">
+    <div className="min-h-svh p-5 pb-0 md:p-8">
       <AuthHeader />
-      <div className="mt-20 flex items-center justify-center md:mt-36">
+      <div className="my-20 flex items-center justify-center md:my-36">
         <Card
-          className={`w-full rounded-3xl px-4 py-3 shadow-xs lg:px-10 lg:py-6 ${isSuccess ? 'max-w-[566px]' : 'max-w-[652px]'}`}
+          className={`w-full rounded-3xl border-none px-4 py-3 shadow-xs lg:px-10 lg:py-6 ${isSuccess ? 'max-w-[566px]' : 'max-w-[652px]'}`}
         >
           <CardHeader className="mb-6 items-start p-0">
-            <Link
-              href="/forgot-password"
-              className="flex items-center gap-1 text-sm"
-            >
+            <Link href="/login" className="flex items-center gap-1 text-sm">
               <ArrowLeft className="size-4" />
               Back
             </Link>
           </CardHeader>
           <CardContent className="mx-auto max-w-[492px] px-2">
             <div className="mb-10 text-center">
-              <h1 className="text-xl font-bold lg:text-2xl">
+              <h1 className="text-xl font-bold sm:text-2xl">
                 {isSuccess ? 'Password reset' : 'Set a new Password'}
               </h1>
               <p className="text-sm text-muted-foreground">
@@ -55,7 +52,9 @@ export default function ResetPasswordPage() {
             {isSuccess ? (
               <Link
                 href="/login"
-                className={buttonVariants({ className: 'h-auto w-full py-3' })}
+                className={buttonVariants({
+                  className: 'h-auto w-full py-3.5',
+                })}
               >
                 Log in
               </Link>
@@ -63,7 +62,7 @@ export default function ResetPasswordPage() {
               <ResetPasswordForm setIsSuccess={setIsSuccess} token={token} />
             )}
           </CardContent>
-          <CardFooter className="mt-8 justify-center">
+          <CardFooter className="mt-6 justify-center">
             <p className="text-sm">
               Need help? <Link href="/support">Contact support</Link>
             </p>

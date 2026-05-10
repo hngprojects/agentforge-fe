@@ -2,7 +2,7 @@
 
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Eye, EyeOff, Lock } from 'lucide-react'
+import { Eye, EyeOff, Loader2, Lock } from 'lucide-react'
 
 import { resetPasswordSchema, type ResetPasswordData } from '@/schemas'
 import {
@@ -64,6 +64,8 @@ export function ResetPasswordForm({
     },
   })
 
+  const isSubmiting = mutation.isPending
+
   function onSubmit(data: ResetPasswordData) {
     mutation.mutate(data)
   }
@@ -88,14 +90,15 @@ export function ResetPasswordForm({
         <FormField
           control={form.control}
           name="password"
-          render={({ field }) => (
-            <FormItem>
+          render={({ field, fieldState }) => (
+            <FormItem data-invalid={fieldState.invalid}>
               <FormLabel>Password</FormLabel>
               <FormControl>
                 <InputGroup className="mt-1.5 h-12">
                   <InputGroupInput
                     type={showPassword}
                     placeholder="Enter new password"
+                    aria-invalid={fieldState.invalid}
                     {...field}
                   />
                   <InputGroupAddon>
@@ -127,14 +130,15 @@ export function ResetPasswordForm({
         <FormField
           control={form.control}
           name="confirmPassword"
-          render={({ field }) => (
-            <FormItem className="mt-8">
+          render={({ field, fieldState }) => (
+            <FormItem className="mt-8" data-invalid={fieldState.invalid}>
               <FormLabel>Confirm Password</FormLabel>
               <FormControl>
                 <InputGroup className="mt-1.5 h-12">
                   <InputGroupInput
                     type={showConfirmPassword}
                     placeholder="Confirm new password"
+                    aria-invalid={fieldState.invalid}
                     {...field}
                   />
                   <InputGroupAddon>
@@ -161,8 +165,19 @@ export function ResetPasswordForm({
             </FormItem>
           )}
         />
-        <Button type="submit" className="mt-12 h-auto w-full py-3">
-          Continue
+        <Button
+          disabled={isSubmiting}
+          type="submit"
+          className="mt-12 h-auto w-full py-4"
+        >
+          {isSubmiting ? (
+            <div className="flex items-center gap-1.5">
+              <Loader2 className="size-4 animate-spin" />
+              <span>Loading...</span>
+            </div>
+          ) : (
+            'Continue'
+          )}
         </Button>
       </form>
     </Form>
