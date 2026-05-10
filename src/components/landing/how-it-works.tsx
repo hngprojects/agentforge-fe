@@ -88,17 +88,13 @@ const STEPS = [
   {
     icon: <AtomIcon />,
     title: 'Match reusable Skills',
-    description:
-      'Skills are matched to the tasks your agent should handle.',
+    description: 'Skills are matched to the tasks your agent should handle.',
   },
 ]
 
 export function HowItWorks() {
   return (
-    <section
-      className="relative w-full"
-      style={{ background: '#FBFBFB' }}
-    >
+    <section className="relative w-full" style={{ background: '#FBFBFB' }}>
       {/* Container: width 1439px, padding 40px 80px, column flex, gap 24px */}
       <div
         className="mx-auto flex w-full flex-col items-center"

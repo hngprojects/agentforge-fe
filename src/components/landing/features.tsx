@@ -126,8 +126,8 @@ export function Features() {
             margin: 0,
           }}
         >
-          Keep your agent&apos;s personality, rules, and skills in one
-          reusable ready-to-publish package.
+          Keep your agent&apos;s personality, rules, and skills in one reusable
+          ready-to-publish package.
           <br />
           Find the perfect agent setup on the public package registry.
         </p>

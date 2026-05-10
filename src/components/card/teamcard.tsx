@@ -37,13 +37,13 @@ const TeamCard: React.FC<TeamCardProperties> = ({
 
       <CardContent className="flex flex-col justify-between gap-5 px-[14.31px] pb-3.5">
         <div>
-          <h3 className="pb-1 text-lg font-bold leading-[21.78px] text-neutral-600 md:font-semibold">
+          <h3 className="pb-1 text-lg leading-[21.78px] font-bold text-neutral-600 md:font-semibold">
             {name}
           </h3>
           <p className="pb-[7.16px] text-[12.53px] leading-[15.16px] text-neutral-600">
             {role}
           </p>
-          <p className="md:text-normal line-clamp-3 text-sm font-medium leading-[19.36px] text-neutral-600 md:font-normal">
+          <p className="md:text-normal line-clamp-3 text-sm leading-[19.36px] font-medium text-neutral-600 md:font-normal">
             {description}
           </p>
         </div>

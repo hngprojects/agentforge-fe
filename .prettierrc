@@ -7,5 +7,6 @@
   "useTabs": false,
    "plugins": ["prettier-plugin-tailwindcss"],
      "tailwindAttributes": ["class", "className"],
+  "tailwindStylesheet": "./src/app/globals.css",
   "tailwindFunctions": ["clsx", "cn"]
 }

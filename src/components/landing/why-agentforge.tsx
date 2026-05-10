@@ -35,10 +35,7 @@ const CARDS: Card[] = [
 
 export function WhyAgentForge() {
   return (
-    <section
-      className="relative w-full"
-      style={{ background: '#FFFFFF' }}
-    >
+    <section className="relative w-full" style={{ background: '#FFFFFF' }}>
       <div
         className="mx-auto flex w-full flex-wrap items-center justify-between"
         style={{
@@ -114,9 +111,9 @@ export function WhyAgentForge() {
               margin: 0,
             }}
           >
-            Developers and builders still rewrite the same agent setup,
-            struggle with scattered prompts, and lack a clear structure for
-            files that others can reuse.
+            Developers and builders still rewrite the same agent setup, struggle
+            with scattered prompts, and lack a clear structure for files that
+            others can reuse.
           </p>
 
           {/* Try for Free button - 287px width, padding 16px, radius 8px, bg #0C5D56 */}
