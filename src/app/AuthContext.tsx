@@ -1,11 +1,12 @@
 import axios from 'axios'
 import { createContext, useContext } from 'react'
-import { z, ZodError } from 'zod'
+import { z } from 'zod'
 import { LoginSchema, RegisterSchema } from '~/schemas'
 import { APIResult } from '~/types'
 import { MessageResponse, TokenResponse } from '~/types/auth'
 import { AUTH_PROVIDERS, AuthProviders } from '~/constants/authProviders'
 import { tokenStore } from '~/utils/token'
+import { handleError } from '~/utils/handleError'
 
 type LoginCredentials = z.infer<typeof LoginSchema>
 type RegisterCredentials = z.infer<typeof RegisterSchema>
@@ -31,7 +32,7 @@ type AuthContextType = {
 const AuthContext = createContext<AuthContextType>({} as AuthContextType)
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const baseURL = process.env.NEXT_PUBLIC_BASE_URL
+  const baseURL = 'https://api.staging.agent-forge.hng14.com'
 
   //register returns a message that a message has been sent to email
   const registerUser = async ({
@@ -41,7 +42,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }): Promise<APIResult<MessageResponse>> => {
     try {
       RegisterSchema.parse(registerCredentials)
-      const response = await axios.post(`${baseURL}/api/v1/register`, {
+      const response = await axios.post(`${baseURL}/api/v1/auth/register`, {
         registerCredentials,
       })
       const result = response.data
@@ -50,23 +51,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         data: result,
       }
     } catch (error) {
-      if (error instanceof ZodError) {
-        return {
-          success: false,
-          error: {
-            name: 'Validation Error',
-            statusCode: 422,
-            message: error.errors[0].message,
-          },
-        }
-      }
       return {
         success: false,
-        error: {
-          name: 'Register User failed',
-          statusCode: 500,
-          message: (error as Error).message,
-        },
+        error: handleError(error),
       }
     }
   }
@@ -79,7 +66,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }): Promise<APIResult<TokenResponse>> => {
     try {
       LoginSchema.parse(loginCredentials)
-      const response = await axios.post(`${baseURL}/api/v1/login`, {
+      const response = await axios.post(`${baseURL}/api/v1/auth/login`, {
         loginCredentials,
       })
 
@@ -90,24 +77,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         data: result,
       }
     } catch (error) {
-      if (error instanceof ZodError) {
-        return {
-          success: false,
-          error: {
-            name: 'Validation Error',
-            statusCode: 422,
-            message: error.errors[0].message,
-          },
-        }
-      }
-
       return {
         success: false,
-        error: {
-          name: 'Login User Failed',
-          statusCode: 500,
-          message: (error as Error).message ?? 'Something went wrong',
-        },
+        error: handleError(error),
       }
     }
   }
@@ -124,15 +96,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         return
       }
 
-      window.location.href = `${baseURL}/api/v1/${provider}`
+      window.location.href = `${baseURL}/api/v1/auth/${provider}`
     } catch (error) {
       return {
         success: false,
-        error: {
-          name: 'Login User Failed',
-          statusCode: 500,
-          message: (error as Error).message ?? 'Something went wrong',
-        },
+        error: handleError(error),
       }
     }
   }

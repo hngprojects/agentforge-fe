@@ -1,21 +1,37 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { cookies } from 'next/headers'
+import { clientRoutes } from './routes'
 
 export default async function middleware(request: NextRequest) {
   const { nextUrl } = request
-  const cookieStore = await cookies()
 
-  const token = cookieStore.get('access_token')
+  const token = request.cookies.get('access_token')?.value
   const isLoggedIn = !!token
 
   const isProtectedRoute =
     nextUrl.pathname.startsWith('/dashboard') ||
     nextUrl.pathname.startsWith('/admin')
+
   const isAuthRoute =
     nextUrl.pathname === '/login' || nextUrl.pathname === '/register'
 
+  const isClientRoute = clientRoutes.some((route) =>
+    nextUrl.pathname.startsWith(route)
+  )
+
   if (isProtectedRoute && !isLoggedIn) {
     return NextResponse.redirect(new URL('/login', request.url))
+  }
+
+  if (isClientRoute) {
+    if (!token) {
+      return NextResponse.redirect(new URL('/login', request.url))
+    }
+
+    const requestHeaders = new Headers(request.headers)
+    requestHeaders.set('Authorization', `Bearer ${token}`)
+    return NextResponse.next({
+      request: { headers: requestHeaders },
+    })
   }
 
   if (isAuthRoute && isLoggedIn) {
