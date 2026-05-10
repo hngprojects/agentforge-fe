@@ -22,8 +22,19 @@ import {
   InputGroupButton,
 } from '@/components/ui/input-group'
 import { useState } from 'react'
+import { toast } from 'sonner'
+import { resetPassword } from '~/actions/reset-password'
+import { useMutation } from '@tanstack/react-query'
 
-export function ResetPasswordForm() {
+interface ResetPasswordFormProps {
+  token: string
+  setIsSuccess: (value: boolean) => void
+}
+
+export function ResetPasswordForm({
+  token,
+  setIsSuccess,
+}: ResetPasswordFormProps) {
   const [showPassword, setShowPassword] = useState<'password' | 'text'>(
     'password'
   )
@@ -39,8 +50,22 @@ export function ResetPasswordForm() {
     },
   })
 
+  const mutation = useMutation({
+    mutationFn: (data: ResetPasswordData) =>
+      resetPassword({
+        token: token!,
+        new_password: data.password,
+      }),
+    onSuccess: () => {
+      setIsSuccess(true)
+    },
+    onError: () => {
+      toast.error('Failed to reset password. Your link may have expired.')
+    },
+  })
+
   function onSubmit(data: ResetPasswordData) {
-    console.log('Reset password data:', data)
+    mutation.mutate(data)
   }
 
   function handleShowPassword(e: React.MouseEvent<HTMLButtonElement>) {
