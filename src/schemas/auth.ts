@@ -4,15 +4,23 @@ import { z } from 'zod'
 export const UserPlanSchema = z.enum(['free', 'pro', 'enterprise'])
 export const UserProviderSchema = z.enum(['email', 'github', 'google'])
 
-// Requests
-export const RegisterSchema = z.object({
-  email: z.string().email('Invalid email address'),
-  password: z
-    .string()
-    .min(8, 'Password must be at least 8 characters')
-    .max(128, 'Password must be at most 128 characters'),
-  display_name: z.string().max(100).optional(),
-})
+export const RegisterSchema = z
+  .object({
+    email: z.string().email('Invalid email address'),
+    display_name: z.string().max(100).optional(),
+    password: z
+      .string()
+      .min(8, 'Password must be at least 8 characters')
+      .max(128, 'Password must be at most 128 characters')
+      .regex(/[A-Z]/, 'At least one uppercase letter')
+      .regex(/[a-z]/, 'At least one lowercase letter')
+      .regex(/[0-9]/, 'At least one digit'),
+    confirmPassword: z.string().min(1, 'Please confirm your password'),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ['confirmPassword'],
+  })
 
 export const LoginSchema = z.object({
   email: z.string().email('Invalid email address'),
