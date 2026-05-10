@@ -25,11 +25,41 @@ jobs:
       url: "https://staging.agent-forge.hng14.com"
 
     steps:
+    # When triggered by workflow_run, the run ID is available directly.
+    # When triggered manually (workflow_dispatch), we must look up the latest
+    # successful "Build and Upload" run on the staging branch via the GitHub API.
+    - name: Resolve build run ID
+      id: resolve-run
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+          echo "Manual trigger detected — looking up latest successful build run on staging..."
+          RUN_ID=$(gh run list \
+            --repo "${{ github.repository }}" \
+            --workflow="build-and-upload.yml" \
+            --branch=staging \
+            --status=success \
+            --limit=1 \
+            --json databaseId \
+            --jq '.[0].databaseId')
+
+          if [ -z "$RUN_ID" ] || [ "$RUN_ID" = "null" ]; then
+            echo "❌ No successful 'Build and Upload' run found on staging. Push a commit to staging first."
+            exit 1
+          fi
+          echo "✅ Resolved run ID: $RUN_ID"
+          echo "run_id=$RUN_ID" >> "$GITHUB_OUTPUT"
+        else
+          echo "Automated trigger — using workflow_run ID: ${{ github.event.workflow_run.id }}"
+          echo "run_id=${{ github.event.workflow_run.id }}" >> "$GITHUB_OUTPUT"
+        fi
+
     - name: Download build artifact
       uses: actions/download-artifact@v4
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
-        run-id: ${{ github.event.workflow_run.id }}
+        run-id: ${{ steps.resolve-run.outputs.run_id }}
         name: agentforge-build
         path: .
 
