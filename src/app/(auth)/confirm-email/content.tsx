@@ -38,7 +38,7 @@ export default function ConfirmEmailContent() {
             ?.detail ?? 'The confirmation link is invalid or has expired.'
         setErrorMessage(msg)
       })
-  }, [])
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div

@@ -107,7 +107,7 @@ export function AuthDialog({ trigger }: AuthDialogProps) {
               variant="outline"
               className="group h-14 w-full gap-4 rounded-2xl border-[#E5E7EB] text-base font-semibold transition-all duration-200 hover:border-[#D1D5DB] hover:bg-[#F9FAFB]"
               onClick={() => {
-                window.location.href = "/api/auth/github"
+                window.location.href = '/api/auth/github'
               }}
             >
               <Github className="h-6 w-6 transition-transform group-hover:scale-105" />
