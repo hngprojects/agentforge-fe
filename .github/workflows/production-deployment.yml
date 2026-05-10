@@ -103,17 +103,24 @@ jobs:
             pm2 save || true
 
             # Restart application
+            # PORT must be set explicitly — pm2 restart --update-env only reloads
+            # vars already in the process record, not from a freshly-written .env file.
+            # Production runs on 3001 (staging takes 3000) to avoid port conflicts.
             echo "=== Starting PM2 Process ==="
             if pm2 describe frontend-production > /dev/null 2>&1; then
-              pm2 restart frontend-production --update-env
+              PORT=3001 pm2 restart frontend-production --update-env
             else
-              pm2 start "pnpm start" --name frontend-production
+              pm2 start "pnpm start" --name frontend-production \
+                --env PORT=3001
             fi
 
             # Health check with retry
             echo "=== Running Health Check ==="
             MAX_RETRIES=15
             RETRY_COUNT=0
+
+            # Give Next.js time to bind before the first attempt
+            sleep 3
 
             while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
               if curl -sf "http://localhost:3001/" > /dev/null 2>&1; then
@@ -126,8 +133,13 @@ jobs:
             done
 
             if [ $RETRY_COUNT -eq $MAX_RETRIES ]; then
-              echo "❌ Health check failed. Rolling back..."
-              pm2 resurrect || pm2 start "pnpm start" --name frontend-production
+              echo "❌ Health check failed after ${MAX_RETRIES} attempts."
+              echo "=== PM2 Process Status ==="
+              pm2 describe frontend-production || true
+              echo "=== Last 100 lines of application logs ==="
+              pm2 logs frontend-production --nostream --lines 100 || true
+              echo "=== Rolling back to previous state ==="
+              pm2 resurrect || PORT=3001 pm2 start "pnpm start" --name frontend-production --env PORT=3001
               echo "❌ Deployment FAILED - health check did not pass."
               exit 1
             fi
