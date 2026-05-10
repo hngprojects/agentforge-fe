@@ -18,24 +18,18 @@ export default async function middleware(request: NextRequest) {
     nextUrl.pathname.startsWith(route)
   )
 
-  if (isProtectedRoute && !isLoggedIn) {
+  if (isAuthRoute && isLoggedIn) {
+    return NextResponse.redirect(new URL('/dashboard', request.url))
+  }
+
+  if ((isProtectedRoute || isClientRoute) && !isLoggedIn) {
     return NextResponse.redirect(new URL('/login', request.url))
   }
 
-  if (isClientRoute) {
-    if (!token) {
-      return NextResponse.redirect(new URL('/login', request.url))
-    }
-
+  if (isLoggedIn && (isProtectedRoute || isClientRoute)) {
     const requestHeaders = new Headers(request.headers)
     requestHeaders.set('Authorization', `Bearer ${token}`)
-    return NextResponse.next({
-      request: { headers: requestHeaders },
-    })
-  }
-
-  if (isAuthRoute && isLoggedIn) {
-    return NextResponse.redirect(new URL('/dashboard', request.url))
+    return NextResponse.next({ request: { headers: requestHeaders } })
   }
 
   return NextResponse.next()

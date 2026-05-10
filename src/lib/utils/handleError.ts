@@ -33,7 +33,7 @@ const handleFastApiError = (data: FastApiError, status: number): ApiError => {
 // ─── Main Error Handler ───────────────────────────────────────────────────────
 export const handleError = (error: unknown): ApiError => {
   if (error instanceof ZodError) {
-    return new ApiError(422, error.errors[0].message)
+    return new ApiError(422, error.issues[0]?.message ?? 'Validation failed')
   }
 
   if (error instanceof AxiosError) {
