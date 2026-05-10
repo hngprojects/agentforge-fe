@@ -1,23 +1,21 @@
 name: Staging Deployment
-
 on:
   workflow_dispatch:
   workflow_run:
     workflows: ["Build and Upload"]
     types:
       - completed
-    branches:
-      - staging
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
-
+    if: |
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.workflow_run.conclusion == 'success' &&
+       github.event.workflow_run.head_branch == 'staging')
     environment:
       name: "staging"
       url: "https://staging.agent-forge"
-
     steps:
       - name: Download build artifact
         uses: actions/download-artifact@v4
@@ -28,8 +26,7 @@ jobs:
           path: .
 
       - name: Decode and create .env file
-        run: |
-          echo "${{ secrets.ENV_BASE64 }}" | base64 -d > .env
+        run: echo "${{ secrets.ENV_BASE64 }}" | base64 -d > .env
 
       - name: Copy to server
         uses: appleboy/scp-action@v0.1.7
