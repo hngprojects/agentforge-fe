@@ -1,12 +1,13 @@
 import axios from 'axios'
 import { createContext, useCallback, useContext, useMemo } from 'react'
 import { z } from 'zod'
-import { LoginSchema, RegisterSchema } from '~/schemas'
+
 import { APIResult } from '~/types'
 import { MessageResponse, TokenResponse } from '~/types/auth'
 import { AUTH_PROVIDERS, AuthProviders } from '~/constants/authProviders'
 import { tokenStore } from '~/utils/token'
 import { handleError } from '~/lib/utils/handleError'
+import { LoginSchema, RegisterSchema } from '~/schemas/auth'
 
 type LoginCredentials = z.infer<typeof LoginSchema>
 type RegisterCredentials = z.infer<typeof RegisterSchema>

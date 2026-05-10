@@ -1,10 +1,168 @@
-@import 'swiper/css';
-@import 'swiper/css/navigation';
-@import 'swiper/css/pagination';
-@import 'swiper/css/scrollbar';
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'swiper/css' layer(base);
+@import 'swiper/css/navigation' layer(base);
+@import 'swiper/css/pagination' layer(base);
+@import 'swiper/css/scrollbar' layer(base);
+@import 'tailwindcss';
+
+@custom-variant dark (&:is(.dark *));
+
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+
+  --color-chart-1: hsl(var(--chart-1));
+  --color-chart-2: hsl(var(--chart-2));
+  --color-chart-3: hsl(var(--chart-3));
+  --color-chart-4: hsl(var(--chart-4));
+  --color-chart-5: hsl(var(--chart-5));
+
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up: accordion-up 0.2s ease-out;
+
+  @keyframes accordion-down {
+    from {
+      height: 0;
+    }
+    to {
+      height: var(--radix-accordion-content-height);
+    }
+  }
+  @keyframes accordion-up {
+    from {
+      height: var(--radix-accordion-content-height);
+    }
+    to {
+      height: 0;
+    }
+  }
+}
+
+@theme {
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+
+  --color-chart-1: hsl(var(--chart-1));
+  --color-chart-2: hsl(var(--chart-2));
+  --color-chart-3: hsl(var(--chart-3));
+  --color-chart-4: hsl(var(--chart-4));
+  --color-chart-5: hsl(var(--chart-5));
+
+  /* Agent Forge brand colors */
+  --color-teal-50: hsl(var(--teal-50));
+  --color-teal-800: hsl(var(--teal-800));
+  --color-teal-900: hsl(var(--teal-900));
+  --color-fg-default: hsl(var(--fg-default));
+  --color-fg-muted: hsl(var(--fg-muted));
+  --color-bg-subtle: hsl(var(--bg-subtle));
+
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up: accordion-up 0.2s ease-out;
+
+  @keyframes accordion-down {
+    from {
+      height: 0;
+    }
+    to {
+      height: var(--radix-accordion-content-height);
+    }
+  }
+  @keyframes accordion-up {
+    from {
+      height: var(--radix-accordion-content-height);
+    }
+    to {
+      height: 0;
+    }
+  }
+}
+
+/*
+  The default border color has changed to `currentcolor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
+}
+
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
+}
 
 @layer base {
   :root {
@@ -20,8 +178,7 @@
     --default: 222 47% 11%;
     --default-foreground: 0 0% 100%;
 
-    --primary: 25 95% 53%;
-
+    --primary: 176 100% 18%;
     --primary-foreground: 0 0% 100%;
 
     --secondary: 210 40% 96.1%;
@@ -80,13 +237,21 @@
     --toast-border: 126, 50%, 58%;
 
     --default-badge-bg: 222, 47%, 11%, 0.1;
-    --primary-badge-bg: 25, 95%, 53%, 0.1;
+    --primary-badge-bg: 176, 100%, 18%, 0.1;
     --success-badge-bg: 102, 51%, 52%, 0.1;
     --error-badge-bg: 0, 72%, 51%, 0.1;
 
-    --blog-related-article-bg: 0°, 0%, 98%;
-    --blog-related-article-heading: 0°, 0%, 32%;
-    --blog-related-article-timeread-bg: 220°, 14%, 96%;
+    --blog-related-article-bg: 0deg, 0%, 98%;
+    --blog-related-article-heading: 0deg, 0%, 32%;
+    --blog-related-article-timeread-bg: 220deg, 14%, 96%;
+
+    /* Agent Forge brand colors */
+    --teal-50: 168 11% 96%;
+    --teal-800: 176 100% 18%;
+    --teal-900: 178 60% 16%;
+    --fg-default: 96 8% 4%;
+    --fg-muted: 240 4% 34%;
+    --bg-subtle: 0 0% 98%;
   }
 }
 
@@ -100,52 +265,58 @@
   height: 0.1px;
   width: 0.1px;
 }
-/* Custom Scrollbar Styling */
-/* For Webkit Browsers */
+
+/* Custom Scrollbar Styling - Agent Forge teal */
 ::-webkit-scrollbar {
-  width: 12px; /* Width of the scrollbar */
+  width: 12px;
 }
 
 ::selection {
-  @apply bg-primary;
+  background: #005f5a;
   color: white;
 }
+
 ::-webkit-scrollbar-thumb {
-  @apply bg-primary;
+  background: #005f5a;
   border: 4px solid transparent;
   border-radius: 10px;
   background-clip: content-box;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  @apply bg-primary;
+  background: #114240;
   background-clip: content-box;
 }
 
 ::-webkit-scrollbar-track {
-  background: hsla(0, 0%, 0%, 0.06); /* Color of the track */
-  border-radius: 10px; /* Rounded corners of the track */
+  background: hsla(0, 0%, 0%, 0.06);
+  border-radius: 10px;
 }
 
-/* For Firefox */
 .html {
-  @apply bg-primary;
-  scrollbar-width: thin; /* Options are 'auto', 'thin', 'none' */
+  background: #005f5a;
+  scrollbar-width: thin;
 }
 
-/* For Internet Explorer and Legacy Edge */
 body {
-  -ms-overflow-style: scrollbar; /* Standard scrollbar */
+  -ms-overflow-style: scrollbar;
 }
 
-/* Framer Btn */
+/* Framer Btn - kept for compatibility, updated to teal */
 .radial-gradient {
   background: radial-gradient(
       circle at 50% 0%,
+<<<<<<< HEAD
       hsl(25 95% 53%),
       transparent 60%
     ),
     hsl(25 95% 53%);
+=======
+      hsl(176 100% 18%),
+      transparent 60%
+    ),
+    hsl(176 100% 18%);
+>>>>>>> origin/dev
 }
 .linear-mask {
   mask-image: linear-gradient(
@@ -165,9 +336,9 @@ body {
 .linear-overlay {
   background: linear-gradient(
     -75deg,
-    hsl(25 95% 53%) calc(var(--x) + 20%),
+    hsl(176 100% 18%) calc(var(--x) + 20%),
     rgb(255, 255, 255) calc(var(--x) + 25%),
-    hsl(25 95% 53%) calc(var(--x) + 100%)
+    hsl(176 100% 18%) calc(var(--x) + 100%)
   );
   mask:
     linear-gradient(black, black) content-box,
@@ -178,8 +349,6 @@ body {
   mask-composite: exclude;
   -webkit-mask-composite: xor;
 }
-
-/* Framer Btn */
 
 .spinner_V8m1 {
   transform-origin: center;
