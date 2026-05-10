@@ -37,9 +37,32 @@ export const AuthSignUpForm = () => {
     handleSubmit,
     setError,
     formState: { errors, isSubmitting },
-  } = useForm<RegisterInput>({ resolver: zodResolver(RegisterSchema) })
+  } = useForm<RegisterInput>({
+    resolver: zodResolver(RegisterSchema),
+    mode: 'onChange', // ← live validation for confirmPassword mismatch
+  })
 
   const showPwRules = pwTouched && pwValue.length > 0 && !submitted
+
+  // Strength — Strong only when all 4 rules pass
+  const score = PW_RULES.filter((r) => r.test(pwValue)).length
+  const strengthLabel = ['', 'Weak', 'Fair', 'Good', 'Strong'][score]
+  const strengthColor =
+    score <= 1
+      ? 'bg-red-400'
+      : score === 2
+        ? 'bg-orange-400'
+        : score === 3
+          ? 'bg-yellow-400'
+          : 'bg-teal-500'
+  const strengthTextColor =
+    score <= 1
+      ? 'text-red-400'
+      : score === 2
+        ? 'text-orange-400'
+        : score === 3
+          ? 'text-yellow-500'
+          : 'text-teal-600'
 
   const onSubmit = async (data: RegisterInput) => {
     if (!agreed) {
@@ -71,20 +94,20 @@ export const AuthSignUpForm = () => {
   }
 
   return (
-    <div className="w-full max-w-[460px] overflow-hidden rounded-xl border border-gray-200 bg-gray-100 px-10 py-8 shadow-sm">
+    <div className="border-1px w-full max-w-[460px] overflow-hidden rounded-xl border-[#E6E6E6] bg-[#F6F7F7] px-10 py-8 shadow-sm">
       {/* Back */}
       <button
         type="button"
         onClick={() => router.back()}
-        className="mb-6 flex items-center gap-1 text-xs text-black transition-colors hover:text-gray-800"
+        className="mb-6 flex items-center gap-3 text-[18px] text-black"
       >
-        <ArrowLeft size={13} /> Back
+        <ArrowLeft size={16} /> Back
       </button>
 
       {/* Heading */}
       <div className="mb-6 space-y-1 text-center">
-        <h1 className="text-2xl font-bold text-gray-900">Create account</h1>
-        <p className="text-sm text-gray-400">
+        <h1 className="text-[32px] font-bold text-[#0C0E0D]">Create account</h1>
+        <p className="text-[16px] font-normal text-[#A1A1AA]">
           Enter your details to create an account
         </p>
       </div>
@@ -98,10 +121,10 @@ export const AuthSignUpForm = () => {
 
       <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-4">
         {/* Full name */}
-        <div className="space-y-1">
+        <div className="h-[80px] gap-[8px] space-y-1">
           <label
             htmlFor="display_name"
-            className="text-xs font-medium text-black"
+            className="text-[16px] font-medium text-[#0C0E0D]"
           >
             Full name
           </label>
@@ -111,7 +134,7 @@ export const AuthSignUpForm = () => {
             autoComplete="name"
             placeholder="Enter full name"
             {...register('display_name')}
-            className={`w-full rounded-md border bg-white px-3 py-2.5 text-sm transition-colors outline-none placeholder:text-gray-300 ${errors.display_name ? 'border-red-400 focus:border-red-400' : 'border-gray-300 focus:border-teal-500'}`}
+            className={`w-full rounded-md border px-3 py-2.5 text-[16px] transition-colors outline-none placeholder:text-[#3D3E3D] ${errors.display_name ? 'border-red-400 focus:border-red-400' : 'border-gray-300 focus:border-teal-500'}`}
           />
           {errors.display_name && (
             <p className="text-xs text-red-500">
@@ -121,8 +144,11 @@ export const AuthSignUpForm = () => {
         </div>
 
         {/* Email */}
-        <div className="space-y-1">
-          <label htmlFor="email" className="text-xs font-medium text-black">
+        <div className="h-[80px] gap-[8px] space-y-1">
+          <label
+            htmlFor="email"
+            className="text-[16px] font-medium text-[#0C0E0D]"
+          >
             Email
           </label>
           <input
@@ -131,7 +157,7 @@ export const AuthSignUpForm = () => {
             autoComplete="email"
             placeholder="Enter email address"
             {...register('email')}
-            className={`w-full rounded-md border bg-white px-3 py-2.5 text-sm transition-colors outline-none placeholder:text-gray-300 ${errors.email ? 'border-red-400 focus:border-red-400' : 'border-gray-300 focus:border-teal-500'}`}
+            className={`w-full rounded-md border px-3 py-2.5 text-[16px] transition-colors outline-none placeholder:text-[#3D3E3D] ${errors.email ? 'border-red-400 focus:border-red-400' : 'border-gray-300 focus:border-teal-500'}`}
           />
           {errors.email && (
             <p className="text-xs text-red-500">{errors.email.message}</p>
@@ -140,7 +166,10 @@ export const AuthSignUpForm = () => {
 
         {/* Password */}
         <div className="space-y-1">
-          <label htmlFor="password" className="text-xs font-medium text-black">
+          <label
+            htmlFor="password"
+            className="text-[16px] font-medium text-[#0C0E0D]"
+          >
             Password
           </label>
           <div className="relative">
@@ -156,7 +185,7 @@ export const AuthSignUpForm = () => {
                 },
               })}
               onFocus={() => setPwTouched(true)}
-              className={`w-full rounded-md border bg-white px-3 py-2.5 pr-9 text-sm transition-colors outline-none placeholder:text-gray-300 ${errors.password ? 'border-red-400 focus:border-red-400' : 'border-gray-300 focus:border-teal-500'}`}
+              className={`w-full rounded-md border px-3 py-2.5 pr-9 text-[16px] transition-colors outline-none placeholder:text-[#3D3E3D] ${errors.password ? 'border-red-400 focus:border-red-400' : 'border-gray-300 focus:border-teal-500'}`}
             />
             <button
               type="button"
@@ -168,42 +197,77 @@ export const AuthSignUpForm = () => {
             </button>
           </div>
 
-          {/* Live password rules */}
-          {showPwRules && (
-            <div className="mt-2 space-y-1">
-              {PW_RULES.map((rule) => {
-                const passing = rule.test(pwValue)
-                return (
-                  <div key={rule.label} className="flex items-center gap-1.5">
-                    {passing ? (
-                      <Check
-                        size={11}
-                        className="text-teal-600"
-                        strokeWidth={2.5}
-                      />
-                    ) : (
-                      <X size={11} className="text-red-400" strokeWidth={2.5} />
-                    )}
-                    <span
-                      className={`text-xs ${passing ? 'text-teal-600' : 'text-red-400'}`}
-                    >
-                      {rule.label}
-                    </span>
-                  </div>
-                )
-              })}
+          {/* Strength meter + rules */}
+          {pwTouched && pwValue.length > 0 && (
+            <div className="mt-2 space-y-1.5">
+              {/* 4-segment bar + label */}
+              <div className="flex items-center gap-1.5">
+                {[1, 2, 3, 4].map((i) => (
+                  <div
+                    key={i}
+                    className={`h-1 flex-1 rounded-full transition-all duration-300 ${score >= i ? strengthColor : 'bg-gray-200'}`}
+                  />
+                ))}
+                {strengthLabel && (
+                  <span
+                    className={`ml-1 min-w-[42px] text-right text-xs font-medium ${strengthTextColor}`}
+                  >
+                    {strengthLabel}
+                  </span>
+                )}
+              </div>
+
+              {/* Checklist — only while typing, before submit */}
+              {showPwRules && (
+                <div className="space-y-1">
+                  <p className="text-xs text-gray-400">
+                    {score === 4
+                      ? 'Strong password ✓'
+                      : 'Weak password. Must contain:'}
+                  </p>
+                  {PW_RULES.map((rule) => {
+                    const passing = rule.test(pwValue)
+                    return (
+                      <div
+                        key={rule.label}
+                        className="flex items-center gap-1.5"
+                      >
+                        {passing ? (
+                          <Check
+                            size={11}
+                            className="text-teal-600"
+                            strokeWidth={2.5}
+                          />
+                        ) : (
+                          <X
+                            size={11}
+                            className="text-red-400"
+                            strokeWidth={2.5}
+                          />
+                        )}
+                        <span
+                          className={`text-xs ${passing ? 'text-teal-600' : 'text-red-400'}`}
+                        >
+                          {rule.label}
+                        </span>
+                      </div>
+                    )
+                  })}
+                </div>
+              )}
             </div>
           )}
+
           {!showPwRules && errors.password && (
             <p className="text-xs text-red-500">{errors.password.message}</p>
           )}
         </div>
 
         {/* Confirm password */}
-        <div className="space-y-1">
+        <div className="h-[80px] gap-[8px] space-y-1">
           <label
             htmlFor="confirmPassword"
-            className="text-xs font-medium text-black"
+            className="text-[16px] font-medium text-[#0C0E0D]"
           >
             Confirm password
           </label>
@@ -214,7 +278,7 @@ export const AuthSignUpForm = () => {
               autoComplete="new-password"
               placeholder="Confirm your password"
               {...register('confirmPassword')}
-              className={`w-full rounded-md border bg-white px-3 py-2.5 pr-9 text-sm transition-colors outline-none placeholder:text-gray-300 ${errors.confirmPassword ? 'border-red-400 focus:border-red-400' : 'border-gray-300 focus:border-teal-500'}`}
+              className={`w-full rounded-md border px-3 py-2.5 pr-9 text-[16px] transition-colors outline-none placeholder:text-[#3D3E3D] ${errors.confirmPassword ? 'border-red-400 focus:border-red-400' : 'border-gray-300 focus:border-teal-500'}`}
             />
             <button
               type="button"
@@ -233,12 +297,12 @@ export const AuthSignUpForm = () => {
         </div>
 
         {/* Terms */}
-        <label className="flex cursor-pointer items-center gap-2 text-xs text-black">
+        <label className="flex cursor-pointer items-center gap-2 text-[16px] text-[#020303]">
           <input
             type="checkbox"
             checked={agreed}
             onChange={(e) => setAgreed(e.target.checked)}
-            className="h-3.5 w-3.5 accent-black"
+            className="h-3 w-3 accent-black"
           />
           I agree to{' '}
           <Link
@@ -253,7 +317,7 @@ export const AuthSignUpForm = () => {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full rounded-md bg-teal-800 py-2.5 text-sm font-medium text-white transition-colors hover:bg-teal-900 disabled:opacity-60"
+          className="w-full rounded-md bg-teal-800 py-2.5 text-[16px] font-medium text-white transition-colors hover:bg-teal-900 disabled:opacity-60"
         >
           {isSubmitting ? 'Creating account…' : 'Sign up'}
         </button>
@@ -265,7 +329,7 @@ export const AuthSignUpForm = () => {
       </div>
 
       {/* Sign in */}
-      <p className="mt-4 text-center text-xs text-black">
+      <p className="text-bold mt-4 text-center text-[18px] text-[#000000]">
         Already have an account?{' '}
         <Link
           href="/login"

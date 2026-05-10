@@ -12,13 +12,15 @@ export const AuthOAuthButtons = () => {
     <div className="space-y-3">
       {/* OR divider */}
       <div className="flex items-center gap-3">
-        <div className="h-px flex-1 bg-gray-200" />
-        <span className="content-center text-xs font-bold text-black">OR</span>
-        <div className="h-px flex-1 bg-gray-200" />
+        <div className="flex-1 bg-gray-200" />
+        <span className="content-center text-[14px] font-bold text-[#000000]">
+          OR
+        </span>
+        <div className="flex-1 bg-gray-200" />
       </div>
 
       {/* Buttons */}
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid h-[48px] grid-cols-2 gap-6">
         {providers.map(({ provider, Icon }) => (
           <button
             key={provider}

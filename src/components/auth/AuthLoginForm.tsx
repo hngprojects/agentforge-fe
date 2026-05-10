@@ -78,21 +78,21 @@ export const AuthLoginForm = () => {
   }
 
   return (
-    <div className="w-full max-w-[460px] overflow-hidden rounded-xl border border-gray-200 bg-gray-100 px-10 py-8 shadow-sm">
+    <div className="w-full max-w-[460px] overflow-hidden rounded-xl border border-[#E6E6E6] bg-[#F6F7F7] px-10 py-8 shadow-sm">
       {/* Back */}
       <button
         type="button"
         onClick={() => router.back()}
         aria-label="Go back"
-        className="mb-6 flex items-center gap-1 text-xs text-black transition-colors hover:text-gray-800"
+        className="mb-6 flex items-center gap-3 text-[18px] text-black"
       >
-        <ArrowLeft size={13} /> Back
+        <ArrowLeft size={16} /> Back
       </button>
 
       {/* Heading */}
-      <div className="mb-6 space-y-1 text-center">
-        <h1 className="text-2xl font-bold text-gray-900">Welcome Back</h1>
-        <p className="text-sm text-gray-400">
+      <div className="mb-6 gap-2 space-y-1 text-center">
+        <h1 className="text-[32px] font-bold text-[#0C0E0D]">Welcome Back</h1>
+        <p className="text-[16px] font-normal text-[#A1A1AA]">
           Enter your details to access your account.
         </p>
       </div>
@@ -106,8 +106,11 @@ export const AuthLoginForm = () => {
 
       <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-4">
         {/* Email */}
-        <div className="space-y-1">
-          <label htmlFor="email" className="text-xs font-medium text-black">
+        <div className="h-[80px] gap-[8px] space-y-1">
+          <label
+            htmlFor="email"
+            className="text-[16px] font-medium text-[#0C0E0D]"
+          >
             Email
           </label>
           <div className="relative">
@@ -118,7 +121,7 @@ export const AuthLoginForm = () => {
               aria-invalid={!!errors.email}
               aria-describedby={errors.email ? 'email-error' : undefined}
               {...register('email')}
-              className={`w-full rounded-md border bg-white px-3 py-2.5 pr-9 text-sm transition-colors outline-none placeholder:text-gray-300 ${
+              className={`h-12 w-full rounded-md border px-3 py-2.5 pr-9 text-[16px] transition-colors outline-none placeholder:text-[#3D3E3D] ${
                 errors.email
                   ? 'border-red-400 focus:border-red-400'
                   : emailValid
@@ -140,8 +143,11 @@ export const AuthLoginForm = () => {
         </div>
 
         {/* Password */}
-        <div className="space-y-1">
-          <label htmlFor="password" className="text-xs font-medium text-black">
+        <div className="h-[80px] gap-[8px] space-y-1">
+          <label
+            htmlFor="password"
+            className="text-[16px] font-medium text-[#0C0E0D]"
+          >
             Password
           </label>
           <div className="relative">
@@ -152,7 +158,7 @@ export const AuthLoginForm = () => {
               aria-invalid={!!errors.password}
               aria-describedby={errors.password ? 'password-error' : undefined}
               {...register('password')}
-              className={`w-full rounded-md border bg-white px-3 py-2.5 pr-9 text-sm transition-colors outline-none placeholder:text-gray-300 ${
+              className={`h-12 w-full rounded-md border px-3 py-2.5 pr-9 text-[16px] transition-colors outline-none placeholder:text-[#3D3E3D] ${
                 errors.password
                   ? 'border-red-400 focus:border-red-400'
                   : 'border-gray-300 focus:border-teal-500'
@@ -176,19 +182,16 @@ export const AuthLoginForm = () => {
 
         {/* Remember + Forgot */}
         <div className="flex items-center justify-between">
-          <label className="flex cursor-pointer items-center gap-2 text-xs text-black">
+          <label className="flex cursor-pointer items-center gap-2 text-[16px] text-[#020303]">
             <input
               type="checkbox"
               checked={remember}
               onChange={(e) => setRemember(e.target.checked)}
-              className="h-3.5 w-3.5 accent-black"
+              className="h-3 w-3 border-[#27272A]"
             />
             Remember me
           </label>
-          <Link
-            href="/forgot-password"
-            className="text-xs text-gray-600 hover:underline"
-          >
+          <Link href="/forgot-password" className="text-[16px] text-[#020303]">
             Forgot Password?
           </Link>
         </div>
@@ -197,7 +200,7 @@ export const AuthLoginForm = () => {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full rounded-md bg-teal-800 py-2.5 text-sm font-medium text-white transition-colors hover:bg-teal-900 disabled:opacity-60"
+          className="h-[48px] w-full rounded-md bg-[#004C48] py-2.5 text-[16px] font-medium text-white transition-colors hover:bg-teal-900 disabled:opacity-60"
         >
           {isSubmitting ? 'Signing in...' : 'Continue'}
         </button>
@@ -209,7 +212,7 @@ export const AuthLoginForm = () => {
       </div>
 
       {/* Sign up */}
-      <p className="mt-4 text-center text-xs text-black">
+      <p className="text-bold mt-4 text-center text-[18px] text-[#000000]">
         {"Don't Have an Account?"}{' '}
         <Link
           href="/register"
