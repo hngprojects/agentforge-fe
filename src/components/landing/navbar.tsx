@@ -22,7 +22,7 @@ export function Navbar() {
         {/* Logo - 235x65, gap 4px (your spec) */}
         <Link
           href="/"
-          className="flex items-center justify-center outline-none focus:outline-none focus-visible:outline-none"
+          className="flex items-center justify-center outline-hidden focus:outline-hidden focus-visible:outline-hidden"
           style={{ width: '235px', height: '65px', gap: '4px' }}
         >
           <div className="flex h-10 w-10 items-center justify-center rounded-full bg-teal-800">
@@ -60,7 +60,7 @@ export function Navbar() {
           <li>
             <Link
               href="#"
-              className="transition-colors hover:opacity-70 focus:outline-none focus-visible:outline-none"
+              className="transition-colors hover:opacity-70 focus:outline-hidden focus-visible:outline-hidden"
               style={linkStyle}
             >
               Explore
@@ -69,7 +69,7 @@ export function Navbar() {
           <li>
             <Link
               href="#"
-              className="transition-colors hover:opacity-70 focus:outline-none focus-visible:outline-none"
+              className="transition-colors hover:opacity-70 focus:outline-hidden focus-visible:outline-hidden"
               style={linkStyle}
             >
               Pricing

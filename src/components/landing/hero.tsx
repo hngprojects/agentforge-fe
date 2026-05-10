@@ -162,7 +162,7 @@ export function Hero() {
             value={value}
             onChange={(e) => setValue(e.target.value)}
             placeholder="Describe your agent setup"
-            className="flex-1 bg-transparent outline-none focus:outline-none"
+            className="flex-1 bg-transparent outline-hidden focus:outline-hidden"
             style={{
               fontFamily: 'Inter',
               fontSize: '20px',
@@ -176,7 +176,7 @@ export function Hero() {
               <button
                 type="button"
                 aria-label="Submit"
-                className="flex items-center justify-center outline-none focus:outline-none focus-visible:outline-none"
+                className="flex items-center justify-center outline-hidden focus:outline-hidden focus-visible:outline-hidden"
                 style={{
                   background: 'transparent',
                   border: 'none',
