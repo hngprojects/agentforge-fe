@@ -13,12 +13,12 @@ const store: TokenStore = {
   refreshToken: null,
 }
 
-const baseUrl = ''
+const baseURL = process.env.NEXT_PUBLIC_BASE_URL
 
 const refreshAccessToken = async (): Promise<string | null> => {
   try {
     // refresh_token httpOnly cookie is sent automatically by the browser
-    const response = await axios.post(`${baseUrl}/api/v1/refresh`, {
+    const response = await axios.post(`${baseURL}/api/v1/refresh`, {
       credentials: 'include', // ← ensures httpOnly cookie is sent
     })
 

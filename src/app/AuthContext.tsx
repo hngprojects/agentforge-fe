@@ -31,7 +31,7 @@ type AuthContextType = {
 const AuthContext = createContext<AuthContextType>({} as AuthContextType)
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const baseURL = ''
+  const baseURL = process.env.NEXT_PUBLIC_BASE_URL
 
   //register returns a message that a message has been sent to email
   const registerUser = async ({
