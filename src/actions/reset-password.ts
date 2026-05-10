@@ -12,7 +12,8 @@ interface ResetPasswordResponse {
 export const resetPassword = async (
   payload: ResetPasswordPayload
 ): Promise<ResetPasswordResponse> => {
-  const api = Calls(process.env.PYTHON_BASEURL)
+  const api = Calls(process.env.NEXT_PUBLIC_PYTHON_BASEURL)
+
   const { data } = await api.post<ResetPasswordResponse>(
     '/api/v1/auth/reset-password',
     payload

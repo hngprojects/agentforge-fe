@@ -12,7 +12,7 @@ export default function ResetPasswordPage() {
   const searchParams = useSearchParams()
   const token = searchParams.get('token')
   const router = useRouter()
-  const [isSuccess, setIsSuccess] = useState(false)
+  const [isSuccess, setIsSuccess] = useState(true)
 
   useEffect(() => {
     if (!token) {
@@ -26,7 +26,9 @@ export default function ResetPasswordPage() {
 
   return (
     <div className="flex min-h-svh items-center justify-center p-4">
-      <Card className="w-full max-w-[652px] rounded-3xl px-10 py-7 shadow-xs">
+      <Card
+        className={`w-full rounded-3xl px-10 py-7 shadow-xs ${isSuccess ? 'max-w-[566px]' : 'max-w-[652px]'}`}
+      >
         <CardHeader className="mb-6 items-start p-0">
           <Link href="/forgot-password" className={`flex items-center gap-1`}>
             <ArrowLeft className="size-4" />
