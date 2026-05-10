@@ -28,6 +28,7 @@ export const AuthLoginForm = () => {
     formState: { errors, isSubmitting },
   } = useForm<LoginInput>({ resolver: zodResolver(LoginSchema) })
 
+  // eslint-disable-next-line react-hooks/incompatible-library
   const emailValue = watch('email', '')
   const emailValid = !errors.email && emailValue && emailValue.length > 0
   const onSubmit = async (data: LoginInput) => {
