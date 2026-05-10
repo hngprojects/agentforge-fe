@@ -88,23 +88,18 @@ const STEPS = [
   {
     icon: <AtomIcon />,
     title: 'Match reusable Skills',
-    description:
-      'Skills are matched to the tasks your agent should handle.',
+    description: 'Skills are matched to the tasks your agent should handle.',
   },
 ]
 
 export function HowItWorks() {
   return (
-    <section
-      className="relative w-full"
-      style={{ background: '#FBFBFB' }}
-    >
+    <section className="relative w-full" style={{ background: '#FBFBFB' }}>
       {/* Container: width 1439px, padding 40px 80px, column flex, gap 24px */}
       <div
-        className="mx-auto flex w-full flex-col items-center"
+        className="mx-auto flex w-full flex-col items-center px-6 py-12 md:px-20 md:py-16"
         style={{
           maxWidth: '1439px',
-          padding: '40px 80px',
           gap: '24px',
         }}
       >
@@ -143,13 +138,10 @@ export function HowItWorks() {
 
         {/* Headline: 48px weight 500 line-height 60px */}
         <h2
+          className="text-center text-[28px] leading-tight font-bold sm:text-4xl md:text-5xl"
           style={{
             fontFamily: 'Inter',
-            fontSize: '48px',
-            fontWeight: 500,
-            lineHeight: '60px',
             color: '#0C0E0D',
-            textAlign: 'center',
             margin: 0,
           }}
         >
@@ -158,14 +150,13 @@ export function HowItWorks() {
 
         {/* Subtext: 14px weight 400 line-height 20px, max 466px */}
         <p
+          className="text-center text-[13px] sm:text-sm"
           style={{
             fontFamily: 'Inter',
-            fontSize: '14px',
             fontWeight: 400,
-            lineHeight: '20px',
+            lineHeight: '1.5',
             color: '#52525B',
-            textAlign: 'center',
-            maxWidth: '466px',
+            maxWidth: '320px',
             margin: 0,
           }}
         >

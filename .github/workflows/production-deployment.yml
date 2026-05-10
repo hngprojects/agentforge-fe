@@ -1,0 +1,57 @@
+name: Production Deployment
+
+on:
+  workflow_dispatch:
+  workflow_run:
+    workflows: ["Build and Upload"]
+    types:
+      - completed
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+
+    environment:
+      name: "production"
+      url: "https://agent-forge"
+
+    steps:
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          run-id: ${{ github.event.workflow_run.id }}
+          name: agentforge-build
+          path: .
+
+      - name: Decode and create .env file
+        run: |
+          echo "${{ secrets.ENV_BASE64 }}" | base64 -d > .env
+
+      - name: Copy to server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          source: ".env,agentforge-build.tar.gz"
+          target: "~/agentforge/frontend/production"
+
+      - name: Delete local artifacts
+        run: rm -f agentforge-build.tar.gz .env
+
+      - name: Deploy on server
+        uses: appleboy/ssh-action@v1.2.1
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          script: |
+            cd ~/agentforge/frontend/production
+            tar -xzf agentforge-build.tar.gz
+            rm -f agentforge-build.tar.gz
+            pnpm install --prod
+            pm2 restart frontend-production --update-env

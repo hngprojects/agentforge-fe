@@ -56,10 +56,9 @@ export function Features() {
   return (
     <section className="relative w-full" style={{ background: '#FBFBFB' }}>
       <div
-        className="mx-auto flex w-full flex-col items-center"
+        className="mx-auto flex w-full flex-col items-center px-6 py-12 md:px-20 md:py-16"
         style={{
           maxWidth: '1439px',
-          padding: '40px 80px',
           gap: '24px',
         }}
       >
@@ -123,22 +122,18 @@ export function Features() {
             lineHeight: '20px',
             color: '#52525B',
             textAlign: 'center',
+            maxWidth: '320px',
             margin: 0,
           }}
         >
-          Keep your agent&apos;s personality, rules, and skills in one
-          reusable ready-to-publish package.
-          <br />
-          Find the perfect agent setup on the public package registry.
+          Effortlessly create organized GitHub-Ready agent setup files you can
+          reuse, publish, and adapt across projects in less time.
         </p>
 
-        {/* Cards row */}
+        {/* Cards container - gap 16px vertical */}
         <div
           className="grid w-full grid-cols-1 md:grid-cols-3"
-          style={{
-            gap: '24px',
-            marginTop: '24px',
-          }}
+          style={{ gap: '24px', marginTop: '32px' }}
         >
           {CARDS.map((card) => {
             const isDark = card.variant === 'dark'
@@ -147,14 +142,14 @@ export function Features() {
                 key={card.title}
                 className="flex flex-col"
                 style={{
-                  padding: '32px',
-                  gap: '24px',
-                  borderRadius: '16px',
+                  padding: '24px',
+                  gap: '20px',
+                  borderRadius: '24px',
                   background: isDark ? '#0C5D56' : '#FFFFFF',
                   alignItems: 'flex-start',
                   alignSelf: 'stretch',
                   border: isDark ? 'none' : '1px solid #E4E4E7',
-                  minHeight: '280px',
+                  minHeight: '240px',
                 }}
               >
                 {/* Robot icon */}
@@ -164,9 +159,9 @@ export function Features() {
                 <h3
                   style={{
                     fontFamily: 'Inter',
-                    fontSize: '20px',
+                    fontSize: '18px',
                     fontWeight: 600,
-                    lineHeight: '30px',
+                    lineHeight: '1.4',
                     color: isDark ? '#FFFFFF' : '#0C0E0D',
                     margin: 0,
                   }}
@@ -178,33 +173,31 @@ export function Features() {
                 <p
                   style={{
                     fontFamily: 'Inter',
-                    fontSize: '16px',
+                    fontSize: '14px',
                     fontWeight: 400,
-                    lineHeight: '24px',
+                    lineHeight: '1.6',
                     color: isDark ? '#FFFFFF' : '#52525B',
                     margin: 0,
-                    flex: 1,
                   }}
                 >
                   {card.description}
                 </p>
 
-                {/* Chip - padding 8px 15px, radius 30px, bg muted #F4F4F5 (or white on dark) */}
+                {/* Chip */}
                 <div
                   className="inline-flex items-center justify-center"
                   style={{
-                    padding: '8px 15px',
-                    gap: '10px',
+                    padding: '6px 12px',
                     borderRadius: '30px',
                     background: isDark ? '#FFFFFF' : '#F4F4F5',
+                    marginTop: 'auto',
                   }}
                 >
                   <span
                     style={{
                       fontFamily: 'Inter',
-                      fontSize: '14px',
-                      fontWeight: 400,
-                      lineHeight: '20px',
+                      fontSize: '12px',
+                      fontWeight: 500,
                       color: '#52525B',
                     }}
                   >
