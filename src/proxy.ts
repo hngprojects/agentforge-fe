@@ -10,16 +10,33 @@ export default async function proxy(request: NextRequest) {
   const isProtectedRoute =
     nextUrl.pathname.startsWith('/dashboard') ||
     nextUrl.pathname.startsWith('/admin')
-
-  const isAuthRoute =
-    nextUrl.pathname === '/login' || nextUrl.pathname === '/register'
-
   const isClientRoute = clientRoutes.some((route) =>
     nextUrl.pathname.startsWith(route)
   )
 
-  if (isAuthRoute && isLoggedIn) {
-    return NextResponse.redirect(new URL('/dashboard', request.url))
+  const AUTH_ROUTES = ['/login', '/register']
+  const PUBLIC_ROUTES = [
+    '/login',
+    '/register',
+    '/verify-email',
+    '/confirm-email',
+    '/auth/google/callback',
+  ]
+
+  const { pathname } = request.nextUrl
+  const refreshToken = request.cookies.get('refresh_token')?.value
+
+  const isAuthRoute = AUTH_ROUTES.some((r) => pathname.startsWith(r))
+  const isPublicRoute =
+    pathname === '/' ||
+    PUBLIC_ROUTES.filter((r) => r !== '/').some((r) => pathname.startsWith(r))
+
+  if (refreshToken && isAuthRoute) {
+    return NextResponse.redirect(new URL('/generator', request.url))
+  }
+
+  if (!refreshToken && !isPublicRoute) {
+    return NextResponse.redirect(new URL('/login', request.url))
   }
 
   if ((isProtectedRoute || isClientRoute) && !isLoggedIn) {
@@ -36,5 +53,5 @@ export default async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/((?!.+\\.[\\w]+$|_next).*)', '/', '/(api|trpc)(.*)'],
+  matcher: ['/((?!_next/static|_next/image|favicon.ico|.*\\..*|api/).*)'],
 }
