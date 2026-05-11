@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-
-const BACKEND = process.env.BACKEND_URL  ?? 'http://localhost:8000'
+import { BACKEND_URL } from '@/utils/consts'
 
 export async function POST(request: NextRequest) {
   const refreshToken = request.cookies.get('refresh_token')?.value
@@ -9,7 +8,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ detail: 'No refresh token' }, { status: 401 })
   }
 
-  const backendRes = await fetch(`${BACKEND}/api/v1/auth/refresh`, {
+  const backendRes = await fetch(`${BACKEND_URL}/api/v1/auth/refresh`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

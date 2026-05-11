@@ -53,7 +53,6 @@ export function useAuth() {
           router.push('/confirm-email')
         } else {
           logout()
-          router.push('/login')
         }
       })
   }, [isAuthenticated, setAccessToken, setUser, clear, router])
