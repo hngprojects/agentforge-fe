@@ -7,6 +7,7 @@ const PUBLIC_ROUTES = [
   '/verify-email',
   '/confirm-email',
   '/auth/google/callback',
+  '/reset-password',
 ]
 
 export default async function proxy(request: NextRequest) {
