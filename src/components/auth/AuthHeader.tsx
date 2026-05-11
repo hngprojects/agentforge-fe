@@ -9,6 +9,8 @@ export default function AuthHeader() {
           alt="Agentforge logo"
           className="h-7 w-7 md:h-9 md:w-9 lg:h-full lg:w-full"
           loading="eager"
+          width={40}
+          height={40}
         />
         <p className="text-lg font-bold md:text-2xl">
           AGENT<span className="text-primary">FORGE</span>

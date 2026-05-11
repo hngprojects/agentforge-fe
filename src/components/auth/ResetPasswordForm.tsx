@@ -2,7 +2,8 @@
 
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Eye, EyeOff, Loader2, Lock } from 'lucide-react'
+import { Eye, Loader2, Lock } from 'lucide-react'
+import { LuEyeClosed } from 'react-icons/lu'
 
 import {
   Form,
@@ -126,7 +127,7 @@ export function ResetPasswordForm({
                       {showPassword === 'password' ? (
                         <Eye className="size-4" />
                       ) : (
-                        <EyeOff className="size-4" />
+                        <LuEyeClosed className="size-4" />
                       )}
                     </InputGroupButton>
                   </InputGroupAddon>
@@ -141,7 +142,7 @@ export function ResetPasswordForm({
           name="confirmPassword"
           render={({ field, fieldState }) => (
             <FormItem className="mt-8" data-invalid={fieldState.invalid}>
-              <FormLabel>Confirm Password</FormLabel>
+              <FormLabel>Confirm password</FormLabel>
               <FormControl>
                 <InputGroup className="mt-1.5 h-12">
                   <InputGroupInput
@@ -173,7 +174,7 @@ export function ResetPasswordForm({
                       {showConfirmPassword === 'password' ? (
                         <Eye className="size-4" />
                       ) : (
-                        <EyeOff className="size-4" />
+                        <LuEyeClosed className="size-4" />
                       )}
                     </InputGroupButton>
                   </InputGroupAddon>
