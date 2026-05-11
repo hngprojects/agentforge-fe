@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-
-const BACKEND = process.env.BACKEND_URL  ?? 'http://localhost:8000'
+import { BACKEND_URL } from '@/utils/consts'
 
 export async function GET(request: NextRequest) {
   const token = request.nextUrl.searchParams.get('token')
@@ -10,7 +9,7 @@ export async function GET(request: NextRequest) {
   }
 
   const backendRes = await fetch(
-    `${BACKEND}/api/v1/auth/verify-email?token=${encodeURIComponent(token)}`,
+    `${BACKEND_URL}/api/v1/auth/verify-email?token=${encodeURIComponent(token)}`,
     { method: 'GET' }
   )
 

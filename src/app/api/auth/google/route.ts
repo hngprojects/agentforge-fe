@@ -1,9 +1,8 @@
 import { NextResponse } from 'next/server'
-
-const BACKEND = process.env.BACKEND_URL  ?? 'http://localhost:8000'
+import { BACKEND_URL } from '@/utils/consts'
 
 export async function GET() {
-  const backendRes = await fetch(`${BACKEND}/api/v1/auth/google`)
+  const backendRes = await fetch(`${BACKEND_URL}/api/v1/auth/google`)
   const data = await backendRes.json()
 
   const response = NextResponse.redirect(data.auth_url)

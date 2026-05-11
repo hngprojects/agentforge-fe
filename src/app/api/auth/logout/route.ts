@@ -1,12 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
-
-const BACKEND = process.env.BACKEND_URL  ?? 'http://localhost:8000'
+import { BACKEND_URL } from '@/utils/consts'
 
 export async function POST(request: NextRequest) {
   const refreshToken = request.cookies.get('refresh_token')?.value
   const accessToken = request.headers.get('authorization')
 
-  const backendRes = await fetch(`${BACKEND}/api/v1/auth/logout`, {
+  const backendRes = await fetch(`${BACKEND_URL}/api/v1/auth/logout`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
