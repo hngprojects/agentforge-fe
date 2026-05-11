@@ -16,7 +16,11 @@ export async function POST(request: NextRequest) {
 
   const setCookie = backendRes.headers.get('set-cookie')
   if (setCookie) {
-    const rewritten = setCookie.replace(/path=\/api/i, 'path=/')
+    const rewritten =
+      setCookie
+        .replace(/;\s*path=[^;]*/gi, '')
+        .replace(/;\s*domain=[^;]*/gi, '')
+        .trim() + '; Path=/'
     response.headers.set('set-cookie', rewritten)
   }
 

@@ -48,8 +48,6 @@ export function useAuth() {
 
   useEffect(() => {
     const isPublicPath = PUBLIC_PATHS.some((path) => pathname.startsWith(path))
-    console.log({ isAuthenticated, accessToken, isPublicPath })
-
     if (hydrated.current || isAuthenticated || isPublicPath) return
     hydrated.current = true
 
