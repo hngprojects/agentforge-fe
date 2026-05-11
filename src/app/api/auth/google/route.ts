@@ -5,7 +5,7 @@ const BACKEND = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000'
 export async function GET(request: NextRequest) {
   const refreshToken = request.cookies.get('refresh_token')?.value
   if (refreshToken) {
-    return NextResponse.redirect(new URL('/dashboard', request.url))
+    return NextResponse.redirect(new URL('/generator', request.url))
   }
   const backendRes = await fetch(`${BACKEND}/api/v1/auth/google`, {
     method: 'GET',

@@ -75,8 +75,9 @@ export function useAuth() {
       await logout()
     } finally {
       clear()
+      router.push('/login')  
     }
-  }, [clear])
+  }, [clear, router])
 
   return {
     user,
