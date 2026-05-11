@@ -78,7 +78,7 @@ export const AuthLoginForm = () => {
   }
 
   return (
-    <div className="w-full max-w-[460px] overflow-hidden rounded-xl border border-gray-200 bg-gray-100 px-10 py-8 shadow-sm">
+    <div className="w-full max-w-115 overflow-hidden rounded-xl border border-gray-200 bg-gray-100 px-10 py-8 shadow-sm">
       {/* Back */}
       <button
         type="button"
