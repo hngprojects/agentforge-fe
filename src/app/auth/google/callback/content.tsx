@@ -13,32 +13,26 @@ const font = 'Inter, sans-serif'
 export default function GoogleCallbackPage() {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const { setAccessToken, setUser, clear } = useAuthStore()
-  const called = useRef(false)
 
   useEffect(() => {
-    if (called.current) return
-    called.current = true
+    const code = searchParams.get('code')
+    const state = searchParams.get('state')
 
-    const params = Object.fromEntries(searchParams.entries())
-
+    if (!code || !state) {
+      router.push('/login?error=oauth_failed')
+      return
+    }
     publicClient
-      .get('/auth/google/callback', { params })
+      .post('/auth/google/callback', { code, state })
       .then((res) => {
-        const { access_token } = AccessTokenResponseSchema.parse(res.data)
-        setAccessToken(access_token)
-        return getMe()
+        if (res.data.access_token) {
+          router.push('/generator')
+        } else {
+          router.push('/login?error=oauth_failed')
+        }
       })
-      .then((user) => {
-        setUser(user)
-        console.log(user)
-        router.replace('/dashboard')
-      })
-      .catch(() => {
-        clear()
-        router.replace('/login?error=oauth_failed')
-      })
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+      .catch(() => router.push('/login?error=oauth_failed'))
+  }, [searchParams, router])
 
   return (
     <div
