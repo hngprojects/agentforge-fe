@@ -141,7 +141,7 @@ export function ResetPasswordForm({
           name="confirmPassword"
           render={({ field, fieldState }) => (
             <FormItem className="mt-8" data-invalid={fieldState.invalid}>
-              <FormLabel>Confirm Password</FormLabel>
+              <FormLabel>Confirm password</FormLabel>
               <FormControl>
                 <InputGroup className="mt-1.5 h-12">
                   <InputGroupInput
