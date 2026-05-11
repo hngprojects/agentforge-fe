@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-const BACKEND = process.env.BACKEND_URL  ?? 'http://localhost:8000'
+const BACKEND = process.env.BACKEND_URL ?? 'http://localhost:8000'
 
 export async function POST(request: NextRequest) {
   const body = await request.text()
@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
 
   const setCookie = backendRes.headers.get('set-cookie')
   if (setCookie) {
-    const rewritten = setCookie.replace(/path=\/api\/v1\/auth/i, 'path=/')
+    const rewritten = setCookie.replace(/path=\/api/i, 'path=/')
     response.headers.set('set-cookie', rewritten)
   }
 
