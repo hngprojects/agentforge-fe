@@ -1,12 +1,9 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Loader2 } from 'lucide-react'
-import { useAuthStore } from '@/stores/auth-store'
 import { publicClient } from '@/lib/axios'
-import { AccessTokenResponseSchema } from '@/schemas/auth'
-import { getMe } from '@/lib/api/auth'
 
 const font = 'Inter, sans-serif'
 
