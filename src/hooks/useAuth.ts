@@ -51,6 +51,9 @@ export function useAuth() {
         // here since we don't store it, so just redirect without the param.
         if (err instanceof AxiosError && err.response?.status === 403) {
           router.push('/confirm-email')
+        } else {
+          logout()
+          router.push('/login')
         }
       })
   }, [isAuthenticated, setAccessToken, setUser, clear, router])
@@ -75,7 +78,7 @@ export function useAuth() {
       await logout()
     } finally {
       clear()
-      router.push('/login')  
+      router.push('/login')
     }
   }, [clear, router])
 
