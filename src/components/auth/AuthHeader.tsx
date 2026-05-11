@@ -8,8 +8,6 @@ export default function AuthHeader() {
           src="/images/agentforge_logo.svg"
           alt="Agentforge logo"
           className="h-7 w-7 md:h-9 md:w-9 lg:h-full lg:w-full"
-          height={44}
-          width={44}
           loading="eager"
         />
         <p className="text-lg font-bold md:text-2xl">

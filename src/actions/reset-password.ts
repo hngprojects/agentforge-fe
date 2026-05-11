@@ -1,4 +1,7 @@
+'use server'
+
 import { Calls } from '@/actions/axios'
+import { AxiosError } from 'axios'
 
 interface ResetPasswordPayload {
   token: string
@@ -12,11 +15,18 @@ interface ResetPasswordResponse {
 export const resetPassword = async (
   payload: ResetPasswordPayload
 ): Promise<ResetPasswordResponse> => {
-  const api = Calls(process.env.NEXT_PUBLIC_API_URL)
+  try {
+    const api = Calls(process.env.NEXT_PUBLIC_API_URL)
 
-  const { data } = await api.post<ResetPasswordResponse>(
-    '/api/v1/auth/reset-password',
-    payload
-  )
-  return data
+    const { data } = await api.post<ResetPasswordResponse>(
+      '/api/v1/auth/reset-password',
+      payload
+    )
+    return data
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      throw new Error(error.response?.data.message)
+    }
+    throw new Error('Failed to reset password. Your link may have expired.')
+  }
 }

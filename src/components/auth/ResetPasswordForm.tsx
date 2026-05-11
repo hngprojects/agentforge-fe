@@ -4,7 +4,6 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Eye, EyeOff, Loader2, Lock } from 'lucide-react'
 
-import { resetPasswordSchema, type ResetPasswordData } from '@/schemas'
 import {
   Form,
   FormControl,
@@ -25,6 +24,7 @@ import { useState } from 'react'
 import { toast } from 'sonner'
 import { resetPassword } from '~/actions/reset-password'
 import { useMutation } from '@tanstack/react-query'
+import { ResetPasswordData, resetPasswordSchema } from '~/schemas/auth'
 
 interface ResetPasswordFormProps {
   token: string
