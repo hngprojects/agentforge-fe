@@ -53,7 +53,7 @@ export function ResetPasswordForm({
   const mutation = useMutation({
     mutationFn: (data: ResetPasswordData) =>
       resetPassword({
-        token: token!,
+        token: token,
         new_password: data.password,
       }),
     onSuccess: () => {
@@ -64,7 +64,7 @@ export function ResetPasswordForm({
     },
   })
 
-  const isSubmiting = mutation.isPending
+  const isSubmitting = mutation.isPending
 
   function onSubmit(data: ResetPasswordData) {
     mutation.mutate(data)
@@ -110,9 +110,18 @@ export function ResetPasswordForm({
                     <InputGroupButton
                       className="hover:bg-transparent"
                       size="icon-xs"
-                      aria-label="show password"
-                      title="show password"
+                      aria-label={
+                        showPassword === 'password'
+                          ? 'Hide password'
+                          : 'Show password'
+                      }
+                      title={
+                        showPassword === 'password'
+                          ? 'Hide password'
+                          : 'Show password'
+                      }
                       onClick={handleShowPassword}
+                      type="button"
                     >
                       {showPassword === 'password' ? (
                         <Eye className="size-4" />
@@ -148,9 +157,18 @@ export function ResetPasswordForm({
                     <InputGroupButton
                       className="hover:bg-transparent"
                       size="icon-xs"
-                      aria-label="show password"
-                      title="show password"
+                      aria-label={
+                        showConfirmPassword === 'password'
+                          ? 'Hide password'
+                          : 'Show password'
+                      }
+                      title={
+                        showConfirmPassword === 'password'
+                          ? 'Hide password'
+                          : 'Show password'
+                      }
                       onClick={handleShowConfirmPassword}
+                      type="button"
                     >
                       {showConfirmPassword === 'password' ? (
                         <Eye className="size-4" />
@@ -166,11 +184,11 @@ export function ResetPasswordForm({
           )}
         />
         <Button
-          disabled={isSubmiting}
+          disabled={isSubmitting}
           type="submit"
           className="mt-12 h-12 w-full py-2.5"
         >
-          {isSubmiting ? (
+          {isSubmitting ? (
             <div className="flex items-center gap-1.5">
               <Loader2 className="size-4 animate-spin" />
               <span>Loading...</span>

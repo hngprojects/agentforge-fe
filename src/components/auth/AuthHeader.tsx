@@ -11,7 +11,7 @@ export default function AuthHeader() {
           loading="eager"
         />
         <p className="text-lg font-bold md:text-2xl">
-          AGENT<span className="text-primary">FORGE</span>{' '}
+          AGENT<span className="text-primary">FORGE</span>
         </p>
       </div>
     </header>

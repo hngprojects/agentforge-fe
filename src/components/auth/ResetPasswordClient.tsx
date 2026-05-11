@@ -8,6 +8,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { buttonVariants } from '~/components/ui/button'
 import AuthHeader from '~/components/auth/AuthHeader'
+import LoadingSpinner from '../miscellaneous/loading-spinner'
 
 export default function ResetPasswordClient() {
   const searchParams = useSearchParams()
@@ -22,7 +23,11 @@ export default function ResetPasswordClient() {
   }, [token, router])
 
   if (!token) {
-    return null
+    return (
+      <div className="flex h-svh w-full items-center justify-center">
+        <LoadingSpinner />
+      </div>
+    )
   }
 
   return (
