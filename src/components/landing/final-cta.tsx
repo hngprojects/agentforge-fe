@@ -11,7 +11,7 @@ export function FinalCTA() {
         style={{ maxWidth: '900px', gap: '32px' }}
       >
         <h2
-          className="text-4xl font-bold sm:text-5xl md:text-6xl"
+          className="text-4xl font-bold sm:text-4xl md:text-6xl"
           style={{
             fontFamily: 'Inter',
             lineHeight: '1.1',
@@ -32,14 +32,26 @@ export function FinalCTA() {
             maxWidth: '600px',
           }}
         >
-          Join AgentForge to create, package, and share AI agent setups. No
+          Use AgentForge to create, package, and share AI agent setups. No
           technical mess. Just results.
         </p>
 
         <AuthDialog
           trigger={
-            <Button className="h-16 rounded-2xl bg-[#0C5D56] px-12 text-xl font-bold text-white shadow-xl shadow-[#0C5D56]/20 transition-all hover:bg-[#0a4a3f]">
-              Get Started
+            <Button
+              className="bg-[#0C5D56] text-white transition-all hover:bg-[#0a4a3f]"
+              style={{
+                width: '272px',
+                height: '56px',
+                gap: '10px',
+                padding: '16px',
+                borderRadius: '8px',
+                fontWeight: 600,
+                fontSize: '18px',
+                border: 'none',
+              }}
+            >
+              Start building
             </Button>
           }
         />
