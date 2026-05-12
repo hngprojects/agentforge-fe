@@ -7,28 +7,6 @@ import { login, logout, register, getMe, refresh } from '@/lib/api/auth'
 import type { LoginInput, RegisterInput } from '@/schemas/auth'
 import { AxiosError } from 'axios'
 
-/**
- * Primary auth hook. Use this in all client components — never call the API
- * helpers or the Zustand store directly from a component.
- *
- * @example Login form
- * const { login } = useAuth();
- * await login({ email, password });
- * router.push("/dashboard");
- *
- * @example Show user info
- * const { user } = useAuth();
- * return <p>Hello {user?.display_name}</p>;
- *
- * @example Guard a client component
- * const { isAuthenticated } = useAuth();
- * if (!isAuthenticated) redirect("/login");
- *
- * @example Logout button
- * const { logout } = useAuth();
- * <button onClick={logout}>Sign out</button>
- */
-
 const PUBLIC_PATHS = [
   '/',
   '/login',
@@ -48,7 +26,7 @@ export function useAuth() {
 
   useEffect(() => {
     const isPublicPath = PUBLIC_PATHS.some((path) => pathname.startsWith(path))
-    if (hydrated.current || isAuthenticated || isPublicPath) return
+    if (hydrated.current || isPublicPath) return
     hydrated.current = true
 
     refresh()
@@ -56,27 +34,22 @@ export function useAuth() {
         setAccessToken(access_token)
         return getMe()
       })
-      .then(setUser)
+      .then((me) => {
+        setUser(me)
+      })
       .catch((err: unknown) => {
         clear()
-        // If the refresh cookie belongs to an unverified account, the backend
-        // returns 403. Send them to confirm-email; they have no email to pass
-        // here since we don't store it, so just redirect without the param.
+
         if (err instanceof AxiosError && err.response?.status === 403) {
           router.push('/confirm-email')
-        } else {
-          logout()
+          return
+        }
+
+        if (!isPublicPath) {
+          router.replace('/login')
         }
       })
-  }, [
-    isAuthenticated,
-    setAccessToken,
-    setUser,
-    clear,
-    router,
-    pathname,
-    accessToken,
-  ])
+  }, [isAuthenticated, setAccessToken, setUser, clear, router, pathname])
 
   const handleRegister = useCallback(async (data: RegisterInput) => {
     return register(data)
@@ -98,7 +71,7 @@ export function useAuth() {
       await logout()
     } finally {
       clear()
-      router.push('/login')
+      router.replace('/login')
     }
   }, [clear, router])
 

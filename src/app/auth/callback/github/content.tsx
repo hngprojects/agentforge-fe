@@ -7,7 +7,7 @@ import { publicClient } from '@/lib/axios'
 
 const font = 'Inter, sans-serif'
 
-export default function GoogleCallbackPage() {
+export default function GithubCallbackPage() {
   const router = useRouter()
   const searchParams = useSearchParams()
 
@@ -15,20 +15,35 @@ export default function GoogleCallbackPage() {
     const code = searchParams.get('code')
     const state = searchParams.get('state')
 
+    console.log('GitHub callback hit with code and state:', {
+      hasCode: !!code,
+      hasState: !!state,
+    })
+
     if (!code || !state) {
+      console.error('Missing code or state in URL')
       router.push('/login?error=oauth_failed')
       return
     }
     publicClient
-      .post('/auth/google/callback', { code, state })
+      .post('/auth/github/callback', { code, state })
       .then((res) => {
+        console.log('GitHub callback API response:', res.status, res.data)
         if (res.data.access_token) {
           router.push('/generator')
         } else {
+          console.error('No access token in response')
           router.push('/login?error=oauth_failed')
         }
       })
-      .catch(() => router.push('/login?error=oauth_failed'))
+      .catch((err) => {
+        console.error(
+          'GitHub callback API error:',
+          err.response?.status,
+          err.response?.data
+        )
+        router.push('/login?error=oauth_failed')
+      })
   }, [searchParams, router])
 
   return (
@@ -44,12 +59,12 @@ export default function GoogleCallbackPage() {
         backgroundColor: 'hsl(var(--background))',
       }}
     >
+      <style>{`@keyframes af-spin { to { transform: rotate(360deg); } }`}</style>
       <Loader2
         size={28}
         color="hsl(var(--muted-foreground))"
         style={{ animation: 'af-spin 0.7s linear infinite' }}
       />
-      <style>{`@keyframes af-spin { to { transform: rotate(360deg); } }`}</style>
       <p
         style={{
           fontFamily: font,
@@ -58,7 +73,7 @@ export default function GoogleCallbackPage() {
           margin: 0,
         }}
       >
-        Signing you in…
+        Signing you in with GitHub…
       </p>
     </div>
   )

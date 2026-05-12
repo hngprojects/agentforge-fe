@@ -35,8 +35,7 @@ export const AuthLoginForm = () => {
     setServerError(null)
     try {
       await login(data)
-      // TODO: Implement remember-me functionality
-      router.push('/generator')
+      router.replace('/generator')
     } catch (err: unknown) {
       if (err instanceof AxiosError) {
         const status = err.response?.status
@@ -57,19 +56,20 @@ export const AuthLoginForm = () => {
           return
         }
         if (
-          lower.includes('not found') ||
-          lower.includes('no user') ||
-          lower.includes('email')
-        ) {
-          setServerError('Email does not exist.')
-          return
-        }
-        if (
           lower.includes('password') ||
           lower.includes('invalid') ||
           lower.includes('credentials')
         ) {
-          setServerError('Wrong password. Please try again.')
+          setServerError('Invalid email or password')
+          return
+        }
+
+        if (
+          lower.includes('not found') ||
+          lower.includes('no user') ||
+          lower.includes('does not exist')
+        ) {
+          setServerError('Email does not exist.')
           return
         }
       }
@@ -79,7 +79,6 @@ export const AuthLoginForm = () => {
 
   return (
     <div className="w-full max-w-[460px] overflow-hidden rounded-xl border border-gray-200 bg-gray-100 px-10 py-8 shadow-sm">
-      {/* Back */}
       <button
         type="button"
         onClick={() => router.back()}
@@ -89,7 +88,6 @@ export const AuthLoginForm = () => {
         <ArrowLeft size={13} /> Back
       </button>
 
-      {/* Heading */}
       <div className="mb-6 space-y-1 text-center">
         <h1 className="text-2xl font-bold text-gray-900">Welcome Back</h1>
         <p className="text-sm text-gray-400">
@@ -97,7 +95,6 @@ export const AuthLoginForm = () => {
         </p>
       </div>
 
-      {/* Server error banner */}
       {serverError && (
         <div className="mb-4 rounded-md border border-red-200 bg-red-50 px-3 py-2">
           <p className="text-xs text-red-600">{serverError}</p>
@@ -105,7 +102,6 @@ export const AuthLoginForm = () => {
       )}
 
       <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-4">
-        {/* Email */}
         <div className="space-y-1">
           <label htmlFor="email" className="text-[16px] font-medium text-black">
             Email
@@ -139,7 +135,6 @@ export const AuthLoginForm = () => {
           )}
         </div>
 
-        {/* Password */}
         <div className="space-y-1">
           <label
             htmlFor="password"
@@ -177,7 +172,6 @@ export const AuthLoginForm = () => {
           )}
         </div>
 
-        {/* Remember + Forgot */}
         <div className="flex items-center justify-between">
           <label className="flex cursor-pointer items-center gap-2 text-xs text-black">
             <input
@@ -196,7 +190,6 @@ export const AuthLoginForm = () => {
           </Link>
         </div>
 
-        {/* Submit */}
         <button
           type="submit"
           disabled={isSubmitting}
@@ -206,12 +199,10 @@ export const AuthLoginForm = () => {
         </button>
       </form>
 
-      {/* OAuth */}
       <div className="mt-4">
         <AuthOAuthButtons />
       </div>
 
-      {/* Sign up */}
       <p className="mt-4 text-center text-xs text-black">
         {"Don't Have an Account?"}{' '}
         <Link

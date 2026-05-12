@@ -6,16 +6,17 @@ const BACKEND = (
 
 export async function GET(request: NextRequest) {
   try {
-    const token = request.nextUrl.searchParams.get('token')
+    const accessToken = request.headers.get('authorization')
+    const refreshToken = request.cookies.get('refresh_token')?.value
 
-    if (!token) {
-      return NextResponse.json({ detail: 'Token is required' }, { status: 400 })
-    }
-
-    const backendRes = await fetch(
-      `${BACKEND}/api/v1/auth/verify-email?token=${encodeURIComponent(token)}`,
-      { method: 'GET' }
-    )
+    const backendRes = await fetch(`${BACKEND}/api/v1/auth/me`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(accessToken && { authorization: accessToken }),
+        ...(refreshToken && { cookie: `refresh_token=${refreshToken}` }),
+      },
+    })
 
     const data = await backendRes.json()
     return NextResponse.json(data, { status: backendRes.status })
