@@ -7,6 +7,15 @@ const providers = [
   { provider: 'github', Icon: GitHubIcon },
 ] as const
 
+const providerHandlers = {
+  google: () => {
+    window.location.href = '/api/auth/google'
+  },
+  github: () => {
+    window.location.href = '/api/auth/github'
+  },
+} as const
+
 export const AuthOAuthButtons = () => {
   return (
     <div className="space-y-3">
@@ -23,9 +32,7 @@ export const AuthOAuthButtons = () => {
           <button
             key={provider}
             type="button"
-            onClick={() => {
-              window.location.href = `/api/auth/${provider}`
-            }}
+            onClick={providerHandlers[provider]}
             className="flex items-center justify-center rounded-md border border-gray-200 py-2.5 transition-all hover:border-teal-500 hover:shadow-[0_0_0_3px_rgba(20,184,166,0.1)]"
           >
             <Icon />

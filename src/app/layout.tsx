@@ -9,6 +9,9 @@ const inter = Inter({ subsets: ['latin'] })
 export const metadata: Metadata = {
   title: 'Agent Forge',
   description: 'Agent Forge',
+  icons: {
+    icon: '/images/Logo-1.png',
+  },
 }
 export default function RootLayout({
   children,

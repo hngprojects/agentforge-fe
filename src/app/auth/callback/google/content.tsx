@@ -1,44 +1,50 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Loader2 } from 'lucide-react'
-import { useAuthStore } from '@/stores/auth-store'
 import { publicClient } from '@/lib/axios'
-import { AccessTokenResponseSchema } from '@/schemas/auth'
-import { getMe } from '@/lib/api/auth'
 
 const font = 'Inter, sans-serif'
 
 export default function GoogleCallbackPage() {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const { setAccessToken, setUser, clear } = useAuthStore()
-  const called = useRef(false)
 
   useEffect(() => {
-    if (called.current) return
-    called.current = true
+    const code = searchParams.get('code')
+    const state = searchParams.get('state')
 
-    const params = Object.fromEntries(searchParams.entries())
+    console.log('Google callback hit with code and state:', {
+      hasCode: !!code,
+      hasState: !!state,
+    })
 
+    if (!code || !state) {
+      console.error('Missing code or state in URL')
+      router.push('/login?error=oauth_failed')
+      return
+    }
     publicClient
-      .get('/auth/google/callback', { params })
+      .post('/auth/google/callback', { code, state })
       .then((res) => {
-        const { access_token } = AccessTokenResponseSchema.parse(res.data)
-        setAccessToken(access_token)
-        return getMe()
+        console.log('Callback API response:', res.status, res.data)
+        if (res.data.access_token) {
+          router.push('/generator')
+        } else {
+          console.error('No access token in response')
+          router.push('/login?error=oauth_failed')
+        }
       })
-      .then((user) => {
-        setUser(user)
-        console.log(user)
-        router.replace('/dashboard')
+      .catch((err) => {
+        console.error(
+          'Callback API error:',
+          err.response?.status,
+          err.response?.data
+        )
+        router.push('/login?error=oauth_failed')
       })
-      .catch(() => {
-        clear()
-        router.replace('/login?error=oauth_failed')
-      })
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [searchParams, router])
 
   return (
     <div

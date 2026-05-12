@@ -85,6 +85,7 @@
   --color-secondary-foreground: hsl(var(--secondary-foreground));
 
   --color-muted: hsl(var(--muted));
+  --color-footer-muted: hsl(var(--footer-muted));
   --color-muted-foreground: hsl(var(--muted-foreground));
 
   --color-accent: hsl(var(--accent));
@@ -167,10 +168,10 @@
 @layer base {
   :root {
     --background: 0 0% 98%;
-    --foreground: 222.2 84% 4.9%;
+    --foreground: 150 8% 5%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card: 180 6% 97%;
+    --card-foreground: 150 8% 5%;
 
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
@@ -178,13 +179,14 @@
     --default: 222 47% 11%;
     --default-foreground: 0 0% 100%;
 
-    --primary: 176 100% 18%;
-    --primary-foreground: 0 0% 100%;
+    --primary: 175 77% 21%;
+    --primary-foreground: 180 6% 97%;
 
     --secondary: 210 40% 96.1%;
     --secondary-foreground: 222.2 47.4% 11.2%;
 
     --muted: 210 40% 96.1%;
+    --footer-muted: 0 0% 91%;
     --muted-foreground: 215.4 16.3% 46.9%;
 
     --accent: 210 40% 96.1%;
@@ -218,7 +220,7 @@
     --warning-50: 25% 100% 98%;
 
     --border: 214 32% 91%;
-    --input: 214 32% 91%;
+    --input: 165 3% 70%;
     --ring: 222.2 84% 4.9%;
 
     --radius: 0.5rem;
@@ -252,6 +254,24 @@
     --fg-default: 96 8% 4%;
     --fg-muted: 240 4% 34%;
     --bg-subtle: 0 0% 98%;
+  }
+
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus {
+    -webkit-text-fill-color: inherit !important;
+    -webkit-box-shadow: 0 0 0px 1000px hsl(180 6% 97%) inset !important;
+    transition: background-color 5000s ease-in-out 0s;
+  }
+
+  button:not(:disabled),
+  [role='button']:not(:disabled) {
+    cursor: pointer;
+    opacity: 1;
+  }
+
+  input[type='password']::-ms-reveal {
+    display: none;
   }
 }
 

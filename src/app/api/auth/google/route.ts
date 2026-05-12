@@ -1,33 +1,33 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextResponse } from 'next/server'
 
-const BACKEND = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000'
+const BACKEND = (
+  process.env.BACKEND_URL ?? 'https://api.staging.agent-forge.hng14.com'
+).replace(/\/$/, '')
 
-export async function GET(request: NextRequest) {
-  const refreshToken = request.cookies.get('refresh_token')?.value
-  if (refreshToken) {
-    return NextResponse.redirect(new URL('/dashboard', request.url))
-  }
-  const backendRes = await fetch(`${BACKEND}/api/v1/auth/google`, {
-    method: 'GET',
-    redirect: 'manual',
-  })
+export async function GET() {
+  try {
+    const backendRes = await fetch(`${BACKEND}/api/v1/auth/google`)
+    const data = await backendRes.json()
 
-  const location = backendRes.headers.get('location')
-  if (!location) {
+    if (!backendRes.ok) {
+      return NextResponse.json(data, { status: backendRes.status })
+    }
+
+    const response = NextResponse.redirect(data.auth_url)
+
+    response.cookies.set('oauth_state', data.state, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 60 * 10,
+      path: '/',
+    })
+
+    return response
+  } catch (error) {
     return NextResponse.json(
-      { detail: 'No redirect from backend' },
-      { status: 500 }
+      { message: 'Failed to connect to backend' },
+      { status: 502 }
     )
   }
-
-  const response = NextResponse.redirect(location)
-
-  backendRes.headers.forEach((value, key) => {
-    if (key.toLowerCase() === 'set-cookie') {
-      const rewritten = value.replace(/path=\/api\/v1\/auth/i, 'path=/')
-      response.headers.append('set-cookie', rewritten)
-    }
-  })
-
-  return response
 }

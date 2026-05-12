@@ -7,7 +7,11 @@ const PUBLIC_ROUTES = [
   '/forgot-password',
   '/verify-email',
   '/confirm-email',
-  '/auth/google/callback',
+  '/auth/callback/google',
+  '/auth/callback/github',
+  '/reset-password',
+  '/explore',
+  '/pricing',
 ]
 
 export default async function proxy(request: NextRequest) {
@@ -16,8 +20,7 @@ export default async function proxy(request: NextRequest) {
 
   const isAuthRoute = AUTH_ROUTES.some((r) => pathname.startsWith(r))
   const isPublicRoute =
-    pathname === '/' ||
-    PUBLIC_ROUTES.filter((r) => r !== '/').some((r) => pathname.startsWith(r))
+    pathname === '/' || PUBLIC_ROUTES.some((r) => pathname.startsWith(r))
 
   if (refreshToken && isAuthRoute) {
     return NextResponse.redirect(new URL('/generator', request.url))
@@ -27,7 +30,16 @@ export default async function proxy(request: NextRequest) {
     return NextResponse.redirect(new URL('/login', request.url))
   }
 
-  return NextResponse.next()
+  const response = NextResponse.next()
+
+  if (!isPublicRoute) {
+    response.headers.set(
+      'Cache-Control',
+      'no-store, max-age=0, must-revalidate'
+    )
+  }
+
+  return response
 }
 
 export const config = {

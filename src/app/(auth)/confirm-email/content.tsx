@@ -30,7 +30,7 @@ export default function ConfirmEmailContent() {
     verifyEmail(token)
       .then(() => {
         setState('success')
-        setTimeout(() => router.push('/dashboard'), 2500)
+        setTimeout(() => router.push('/login'), 2500)
       })
       .catch((err: unknown) => {
         setState('error')
@@ -80,7 +80,7 @@ export default function ConfirmEmailContent() {
               You&apos;re verified!
             </h1>
             <p className="mb-8 text-base leading-relaxed text-muted-foreground">
-              Your account is active. Taking you to the dashboard now…
+              Your account is active. Taking you to the login page now…
             </p>
             <div className="w-full rounded-xl border border-border bg-muted/40 p-4">
               <div className="flex items-center gap-3">
@@ -92,7 +92,7 @@ export default function ConfirmEmailContent() {
                     Email confirmed
                   </p>
                   <p className="text-xs text-muted-foreground">
-                    Redirecting to dashboard…
+                    Redirecting to login…
                   </p>
                 </div>
                 <Loader2 className="ml-auto h-4 w-4 animate-spin text-muted-foreground" />
@@ -167,7 +167,7 @@ export default function ConfirmEmailContent() {
               {[
                 { step: '1', text: 'Open the email from us' },
                 { step: '2', text: 'Click the confirmation link' },
-                { step: '3', text: "You'll be redirected to your dashboard" },
+                { step: '3', text: "You'll be redirected to your login" },
               ].map(({ step, text }) => (
                 <div
                   key={step}

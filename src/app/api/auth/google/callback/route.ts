@@ -1,31 +1,55 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-const BACKEND = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000'
+const BACKEND = (
+  process.env.BACKEND_URL ?? 'https://api.staging.agent-forge.hng14.com'
+).replace(/\/$/, '')
 
-export async function GET(request: NextRequest) {
-  const search = request.nextUrl.search
+export async function POST(request: NextRequest) {
+  try {
+    const body = await request.text()
+    const stateCookie = request.cookies.get('oauth_state')?.value
 
-  const cookieHeader = request.headers.get('cookie') ?? ''
-
-  const backendRes = await fetch(
-    `${BACKEND}/api/v1/auth/google/callback${search}`,
-    {
-      method: 'GET',
+    const backendRes = await fetch(`${BACKEND}/api/v1/auth/google/callback`, {
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        cookie: cookieHeader, // ← this is what was missing
+        ...(stateCookie && { cookie: `oauth_state=${stateCookie}` }),
       },
-    }
-  )
+      body,
+    })
 
-  const data = await backendRes.json()
-  const response = NextResponse.json(data, { status: backendRes.status })
+    const data = await backendRes.json()
+    const response = NextResponse.json(data, { status: backendRes.status })
 
-  const setCookie = backendRes.headers.get('set-cookie')
-  if (setCookie) {
-    const rewritten = setCookie.replace(/path=\/api\/v1\/auth/i, 'path=/')
-    response.headers.set('set-cookie', rewritten)
+    const setCookies = backendRes.headers.getSetCookie()
+    setCookies.forEach((cookieStr) => {
+      const [nameValue] = cookieStr.split(';')
+      const [name, value] = nameValue.split('=')
+
+      const options: {
+        path: string
+        httpOnly: boolean
+        secure: boolean
+        sameSite: 'lax' | 'strict' | 'none'
+        maxAge?: number
+      } = {
+        path: '/',
+        httpOnly: cookieStr.toLowerCase().includes('httponly'),
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+      }
+
+      const maxAgeMatch = cookieStr.match(/Max-Age=([^;]+)/i)
+      if (maxAgeMatch) options.maxAge = parseInt(maxAgeMatch[1])
+
+      response.cookies.set(name.trim(), value.trim(), options)
+    })
+
+    return response
+  } catch (error) {
+    return NextResponse.json(
+      { message: 'Failed to connect to backend' },
+      { status: 502 }
+    )
   }
-
-  return response
 }
