@@ -66,7 +66,6 @@ export function useAuth() {
           router.push('/confirm-email')
         } else {
           logout()
-          router.push('/login')
         }
       })
   }, [
