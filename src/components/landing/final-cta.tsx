@@ -32,8 +32,8 @@ export function FinalCTA() {
             maxWidth: '600px',
           }}
         >
-          Use AgentForge to create, package, and share AI agent setups. No
-          technical mess. Just results.
+          Use Anvila to create, package, and share AI agent setups. No technical
+          mess. Just results.
         </p>
 
         <AuthDialog

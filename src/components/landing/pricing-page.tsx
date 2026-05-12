@@ -1,17 +1,9 @@
 'use client'
 
 import { useState } from 'react'
-import Link from 'next/link'
-import {
-  Facebook,
-  Twitter,
-  Linkedin,
-  Instagram,
-  ChevronDown,
-  ChevronUp,
-} from 'lucide-react'
+import { ChevronDown, ChevronUp } from 'lucide-react'
 import { Navbar } from './navbar'
-import { AuthDialog } from './auth-dialog'
+import { Footer } from './footer'
 
 const CheckIcon = () => (
   <span
@@ -98,19 +90,19 @@ const GoPrivateButton = () => (
       gap: 10,
       alignSelf: 'stretch',
       borderRadius: 10,
-      background: '#0C5D56',
-      border: 'none',
+      border: '2px solid #005F5A',
+      background: '#005F5A',
       cursor: 'pointer',
     }}
   >
     <span
       style={{
-        color: '#FFFFFF',
-        fontFamily: 'Lato, Inter, sans-serif',
+        color: '#F6F7F7',
+        fontFamily: 'Geist, Inter, sans-serif',
         fontSize: 18,
         fontStyle: 'normal',
-        fontWeight: 700,
-        lineHeight: 'normal',
+        fontWeight: 600,
+        lineHeight: '28px',
       }}
     >
       Go Private
@@ -118,94 +110,127 @@ const GoPrivateButton = () => (
   </button>
 )
 
-const footerLinkStyle: React.CSSProperties = {
-  color: '#A0A5A3',
-  fontSize: '14px',
-  textDecoration: 'none',
-  transition: 'color 0.2s',
-}
-const footerHeadingStyle: React.CSSProperties = {
-  color: '#FFFFFF',
-  fontSize: '16px',
-  fontWeight: 600,
-  marginBottom: '20px',
-}
+const CustomPackageButton = () => (
+  <button
+    style={{
+      display: 'flex',
+      height: 55.65,
+      padding: '16px 103px',
+      justifyContent: 'center',
+      alignItems: 'center',
+      gap: 10,
+      alignSelf: 'stretch',
+      borderRadius: 10,
+      border: '2px solid #005F5A',
+      background: '#005F5A',
+      cursor: 'pointer',
+    }}
+  >
+    <span
+      style={{
+        color: '#F6F7F7',
+        fontFamily: 'Geist, Inter, sans-serif',
+        fontSize: 18,
+        fontStyle: 'normal',
+        fontWeight: 600,
+        lineHeight: '28px',
+      }}
+    >
+      Custom Package
+    </span>
+  </button>
+)
+
+const plans = [
+  {
+    name: 'Free Tier',
+    price: '0',
+    description: 'Perfect for exploring and starting with simple agents',
+    button: <StartForFreeButton />,
+    features: [
+      'Access to Public Registry',
+      'Basic agent setup (files & Skills)',
+      'Community support',
+      'Standard GitHub publishing',
+    ],
+  },
+  {
+    name: 'Private Registry',
+    price: '500',
+    description:
+      'For teams needing privacy, control and faster agent generation',
+    button: <GoPrivateButton />,
+    isPopular: true,
+    features: [
+      'Private Registry hosting',
+      'Advanced agent structure',
+      'Prioritized support',
+      'Internal team collaboration tools',
+      'Private GitHub sync',
+    ],
+  },
+  {
+    name: 'Enterprise Package',
+    price: 'Custom',
+    description: 'Custom solutions for high-scale agent workforce deployments',
+    button: <CustomPackageButton />,
+    features: [
+      'Unlimited private registries',
+      'Dedicated agent architect',
+      '24/7 Enterprise SLA',
+      'Custom integrations & Skills',
+      'On-premise deployment options',
+    ],
+  },
+]
+
+const faqs = [
+  {
+    q: 'Can I change my plan later?',
+    a: 'Yes, you can upgrade or downgrade your plan at any time through your dashboard settings. Changes will be reflected in your next billing cycle.',
+  },
+  {
+    q: 'How does the Private Registry work?',
+    a: 'A Private Registry allows you to store and manage your agent setup packages securely, accessible only by authorized members of your team or organization.',
+  },
+  {
+    q: 'Is there a setup fee for Enterprise?',
+    a: 'Enterprise pricing is tailored to your specific requirements. While there may be a one-time implementation fee, it covers dedicated architecture and integration support.',
+  },
+  {
+    q: 'What payment methods do you accept?',
+    a: 'We accept all major credit cards, bank transfers for enterprise clients, and are working on integrating cryptocurrency payments.',
+  },
+  {
+    q: 'Do you offer a free trial for Private Registry?',
+    a: 'Yes, we offer a 14-day free trial for the Private Registry plan so you can experience the full feature set before committing.',
+  },
+]
 
 export function PricingPage() {
-  const [openFaq, setOpenFaq] = useState<number | null>(null)
-
-  const faqs = [
-    {
-      q: 'What does "one-time per agent" mean?',
-      a: 'You pay once to turn a specific agent setup private. No recurring subscriptions.',
-    },
-    {
-      q: 'Can I make a public agent private later?',
-      a: 'Yes, upgrade any public agent to professional at any time.',
-    },
-    {
-      q: 'Is there a limit on how many agents I can generate?',
-      a: 'No, both plans allow unlimited agent generation.',
-    },
-    {
-      q: 'What payment methods do you accept?',
-      a: 'All major credit cards, PayPal, and crypto.',
-    },
-    {
-      q: 'Do you offer refunds?',
-      a: 'Generally no, but contact support for issues.',
-    },
-  ]
+  const [openFaq, setOpenFaq] = useState<number | null>(0)
 
   return (
     <main className="min-h-screen bg-white">
       <Navbar />
 
-      {}
-      <section
-        style={{
-          display: 'flex',
-          width: '100%',
-          maxWidth: 1440,
-          margin: '0 auto',
-          padding: '40px 80px',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: 48,
-          alignSelf: 'stretch',
-        }}
-      >
-        {}
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: 16,
-          }}
-        >
-          {}
+      <section className="mx-auto max-w-7xl px-6 pt-20 pb-16 md:px-20 md:pt-32 md:pb-24">
+        <div className="mb-16 flex flex-col items-center justify-center gap-4">
           <div
             style={{
               display: 'flex',
-              padding: '6px 12px',
+              padding: '4px 12px',
+              justifyContent: 'center',
               alignItems: 'center',
-              gap: 8,
-              borderRadius: 9999,
-              border: '0.5px solid #A1A1AA',
+              gap: 10,
+              borderRadius: 24,
+              border: '1.5px solid #F1F5F9',
+              background: '#F8FAFC',
             }}
           >
             <span
               style={{
-                width: 6,
-                height: 6,
-                borderRadius: 9999,
-                background: '#EA580C',
-              }}
-            />
-            <span
-              style={{
-                color: '#52525B',
+                color: '#005F5A',
                 fontFamily: 'Geist, Inter, sans-serif',
                 fontSize: 12,
                 fontWeight: 500,
@@ -216,7 +241,6 @@ export function PricingPage() {
             </span>
           </div>
 
-          {}
           <h1
             style={{
               color: '#0C0E0D',
@@ -229,374 +253,100 @@ export function PricingPage() {
               margin: 0,
             }}
           >
-            Simple, honest pricing.
+            Simple, honest pricing
           </h1>
-
-          {}
           <p
             style={{
               color: '#52525B',
               textAlign: 'center',
-              fontFamily: 'Geist, Inter, sans-serif',
-              fontSize: 16,
+              fontFamily: 'Inter, sans-serif',
+              fontSize: 18,
               fontStyle: 'normal',
               fontWeight: 400,
-              lineHeight: '24px',
-              maxWidth: 600,
+              lineHeight: '28px',
+              maxWidth: 580,
               margin: 0,
             }}
           >
-            Public agents are always free. Pay once to go private. No
-            subscriptions, no surprises.
+            Get started with Anvila for free, or upgrade to a Private Registry
+            for team collaboration and advanced architecture.
           </p>
         </div>
 
-        {}
-        <div
-          style={{
-            display: 'flex',
-            padding: '12px 24px',
-            alignItems: 'stretch',
-            gap: 5,
-            alignSelf: 'stretch',
-          }}
-        >
-          {}
-          <div
-            style={{
-              display: 'flex',
-              padding: 24,
-              flexDirection: 'column',
-              alignItems: 'flex-start',
-              gap: 10,
-              flex: '1 0 0',
-              alignSelf: 'stretch',
-              borderRadius: 20,
-              border: '1px solid #F0F0F0',
-              background: '#FFFFFF',
-            }}
-          >
-            {}
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
+          {plans.map((plan) => (
             <div
-              style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                flex: '1 0 0',
-                alignSelf: 'stretch',
-              }}
+              key={plan.name}
+              className={`relative flex flex-col rounded-[24px] border border-[#F1F5F9] bg-white p-10 transition-shadow hover:shadow-lg ${plan.isPopular ? 'border-[#0C5D56] ring-1 ring-[#0C5D56]' : ''}`}
             >
-              <span
-                style={{
-                  color: '#52525B',
-                  fontFamily: 'Geist, Inter, sans-serif',
-                  fontSize: 18,
-                  fontWeight: 500,
-                  lineHeight: '28px',
-                }}
-              >
-                Free
-              </span>
-            </div>
-
-            {}
-            <div style={{ display: 'flex', alignItems: 'baseline', gap: 6 }}>
-              <span
-                style={{
-                  color: '#52525B',
-                  fontFamily: 'Geist, Inter, sans-serif',
-                  fontSize: 36,
-                  fontWeight: 600,
-                  lineHeight: '44px',
-                }}
-              >
-                $
-              </span>
-              <span
-                style={{
-                  color: '#52525B',
-                  fontFamily: 'Geist, Inter, sans-serif',
-                  fontSize: 36,
-                  fontWeight: 600,
-                  lineHeight: '44px',
-                }}
-              >
-                0
-              </span>
-            </div>
-
-            <p
-              style={{
-                color: '#A1A1AA',
-                fontFamily: 'Geist, Inter, sans-serif',
-                fontSize: 16,
-                fontWeight: 400,
-                lineHeight: '24px',
-                margin: 0,
-              }}
-            >
-              Always. No credit card required.
-            </p>
-
-            <AuthDialog trigger={<StartForFreeButton />} />
-
-            <p
-              style={{
-                color: '#52525B',
-                fontFamily: 'Geist, Inter, sans-serif',
-                fontSize: 16,
-                fontWeight: 600,
-                lineHeight: '24px',
-                margin: 0,
-                marginTop: 8,
-              }}
-            >
-              What&apos;s included:
-            </p>
-
-            <ul
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'flex-start',
-                gap: 12,
-                alignSelf: 'stretch',
-                listStyle: 'none',
-                padding: 0,
-                margin: 0,
-              }}
-            >
-              {[
-                'Unlimited agent generation',
-                'Github auto-publishing',
-                'Listed in public registry',
-              ].map((t) => (
-                <li
-                  key={t}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 10,
-                    color: '#52525B',
-                    fontFamily: 'Geist, Inter, sans-serif',
-                    fontSize: 14,
-                    fontWeight: 400,
-                    lineHeight: '20px',
-                  }}
+              {plan.isPopular && (
+                <div
+                  className="absolute -top-3 left-1/2 flex -translate-x-1/2 items-center gap-1.5 rounded-full px-4 py-1"
+                  style={{ background: '#FFF1EB' }}
                 >
-                  <CheckIcon />
-                  {t}
-                </li>
-              ))}
-            </ul>
-          </div>
+                  <FireIcon />
+                  <span className="text-xs font-semibold text-[#ED5F15]">
+                    MOST POPULAR
+                  </span>
+                </div>
+              )}
 
-          {}
-          <div
-            style={{
-              display: 'flex',
-              minHeight: 587,
-              padding: 2,
-              flexDirection: 'column',
-              alignItems: 'flex-start',
-              flex: '1 0 0',
-              alignSelf: 'stretch',
-              borderRadius: 20,
-              border: '1px solid #0C5D56',
-              background: '#0C5D56',
-            }}
-          >
-            {}
-            <div
-              style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                padding: '14px 22px',
-                alignSelf: 'stretch',
-              }}
-            >
-              <span
-                style={{
-                  color: '#FFFFFF',
-                  fontFamily: 'Geist, Inter, sans-serif',
-                  fontSize: 20,
-                  fontWeight: 500,
-                  lineHeight: '30px',
-                }}
-              >
-                Professional
-              </span>
-
-              {}
-              <div
-                style={{
-                  display: 'flex',
-                  padding: '4px 10px',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  gap: 2,
-                  borderRadius: 20,
-                  background: '#FFFFFF',
-                }}
-              >
-                <FireIcon />
-                <span
-                  style={{
-                    color: '#7A7A7A',
-                    fontFamily: 'Geist, Inter, sans-serif',
-                    fontSize: 10,
-                    fontWeight: 400,
-                    lineHeight: '16px',
-                  }}
-                >
-                  MOST POPULAR
-                </span>
-              </div>
-            </div>
-
-            {}
-            <div
-              style={{
-                display: 'flex',
-                padding: 24,
-                flexDirection: 'column',
-                alignItems: 'flex-start',
-                gap: 10,
-                flex: '1 0 0',
-                alignSelf: 'stretch',
-                borderRadius: 18,
-                background: '#FFFFFF',
-              }}
-            >
-              {}
-              <div style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
-                <span
-                  style={{
-                    color: '#52525B',
-                    fontFamily: 'Geist, Inter, sans-serif',
-                    fontSize: 36,
-                    fontWeight: 600,
-                    lineHeight: '44px',
-                  }}
-                >
-                  $
-                </span>
-                <span
-                  style={{
-                    color: '#52525B',
-                    fontFamily: 'Geist, Inter, sans-serif',
-                    fontSize: 36,
-                    fontWeight: 600,
-                    lineHeight: '44px',
-                  }}
-                >
-                  5
-                </span>
-                <span
-                  style={{
-                    color: '#A1A1AA',
-                    fontFamily: 'Geist, Inter, sans-serif',
-                    fontSize: 12,
-                    fontWeight: 400,
-                    lineHeight: '24px',
-                    width: 280,
-                  }}
-                >
-                  one time payment
-                </span>
+              <div className="mb-8">
+                <h3 className="mb-2 text-xl font-bold text-[#0C0E0D]">
+                  {plan.name}
+                </h3>
+                <p className="text-sm text-[#52525B]">{plan.description}</p>
               </div>
 
-              <p
-                style={{
-                  color: '#A1A1AA',
-                  fontFamily: 'Geist, Inter, sans-serif',
-                  fontSize: 16,
-                  fontWeight: 400,
-                  lineHeight: '24px',
-                  margin: 0,
-                }}
-              >
-                Best for fast agent and operations
-              </p>
+              <div className="mb-8 flex items-baseline gap-1">
+                <span className="text-4xl font-bold text-[#0C0E0D]">
+                  {plan.price === 'Custom' ? '' : '$'}
+                  {plan.price}
+                </span>
+                {plan.price !== 'Custom' && (
+                  <span className="text-[#71717A]">/mo</span>
+                )}
+              </div>
 
-              <AuthDialog trigger={<GoPrivateButton />} />
+              <div className="mb-10">{plan.button}</div>
 
-              <p
-                style={{
-                  color: '#52525B',
-                  fontFamily: 'Geist, Inter, sans-serif',
-                  fontSize: 16,
-                  fontWeight: 600,
-                  lineHeight: '24px',
-                  margin: 0,
-                  marginTop: 8,
-                }}
-              >
-                Everything in Premium:
-              </p>
-
-              <ul
-                style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'flex-start',
-                  gap: 12,
-                  alignSelf: 'stretch',
-                  listStyle: 'none',
-                  padding: 0,
-                  margin: 0,
-                }}
-              >
-                {[
-                  'Everything in public',
-                  'Private GitHub repository',
-                  'Hidden from registry',
-                  'Only you can access it',
-                ].map((t) => (
-                  <li
-                    key={t}
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: 10,
-                      color: '#52525B',
-                      fontFamily: 'Geist, Inter, sans-serif',
-                      fontSize: 14,
-                      fontWeight: 400,
-                      lineHeight: '20px',
-                    }}
-                  >
-                    <CheckIcon />
-                    {t}
-                  </li>
-                ))}
-              </ul>
+              <div className="flex flex-col gap-4">
+                <h4 className="text-sm font-semibold text-[#0C0E0D]">
+                  FEATURES
+                </h4>
+                <ul className="flex flex-col gap-4">
+                  {plan.features.map((feature) => (
+                    <li key={feature} className="flex items-start gap-3">
+                      <CheckIcon />
+                      <span className="text-sm text-[#52525B]">{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
-          </div>
+          ))}
         </div>
       </section>
 
-      {}
-      <section className="mx-auto w-full max-w-4xl px-6 py-20">
-        <h2 className="mb-12 text-center text-4xl font-bold text-[#0C0E0D]">
-          Frequently asked
-        </h2>
-        <div className="flex flex-col gap-4">
+      <section className="bg-[#F8FAFC] px-6 py-20 md:px-20 md:py-32">
+        <div className="mx-auto max-w-3xl">
+          <h2 className="mb-12 text-center text-3xl font-bold text-[#0C0E0D]">
+            Frequently asked questions
+          </h2>
           {faqs.map((faq, i) => (
             <div
               key={i}
-              className="rounded-xl border border-[#E4E4E7] bg-white"
+              className="mb-4 overflow-hidden rounded-xl border border-[#E4E4E7] bg-white"
             >
               <button
-                className="flex w-full items-center justify-between p-6 text-left"
                 onClick={() => setOpenFaq(openFaq === i ? null : i)}
+                className="flex w-full items-center justify-between p-6 text-left transition-colors hover:bg-gray-50"
               >
                 <span className="font-semibold text-[#0C0E0D]">{faq.q}</span>
                 {openFaq === i ? (
-                  <ChevronUp size={20} />
+                  <ChevronUp size={20} className="text-[#71717A]" />
                 ) : (
-                  <ChevronDown size={20} />
+                  <ChevronDown size={20} className="text-[#71717A]" />
                 )}
               </button>
               {openFaq === i && (
@@ -609,115 +359,7 @@ export function PricingPage() {
         </div>
       </section>
 
-      {}
-      <footer
-        className="w-full"
-        style={{ background: '#0C5D56', padding: '40px 80px' }}
-      >
-        <div
-          className="mx-auto flex w-full flex-col"
-          style={{ maxWidth: 1280, gap: 60 }}
-        >
-          <div
-            className="flex flex-col gap-12 lg:grid lg:gap-12"
-            style={{ gridTemplateColumns: '1.5fr 1fr 1fr 1fr' }}
-          >
-            <div className="flex max-w-sm flex-col gap-6">
-              <div className="flex items-center gap-2">
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white">
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <circle cx="12" cy="8" r="4" fill="#005F5A" />
-                    <path
-                      d="M4 20c0-4.4 3.6-8 8-8s8 3.6 8 8"
-                      stroke="#005F5A"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                    />
-                  </svg>
-                </div>
-                <span
-                  style={{
-                    fontSize: 24,
-                    fontWeight: 700,
-                    color: '#FFFFFF',
-                    letterSpacing: '1px',
-                  }}
-                >
-                  AGENTFORGE
-                </span>
-              </div>
-              <p style={{ color: '#A0A5A3', fontSize: 14, lineHeight: 1.7 }}>
-                Agentforge helps builders turn agents ideas into clean setup
-                packages.
-              </p>
-              <div className="flex gap-4">
-                <Link href="#" style={footerLinkStyle}>
-                  <Facebook size={20} />
-                </Link>
-                <Link href="#" style={footerLinkStyle}>
-                  <Twitter size={20} />
-                </Link>
-                <Link href="#" style={footerLinkStyle}>
-                  <Linkedin size={20} />
-                </Link>
-                <Link href="#" style={footerLinkStyle}>
-                  <Instagram size={20} />
-                </Link>
-              </div>
-            </div>
-            <div className="flex flex-col">
-              <h4 style={footerHeadingStyle}>Our Services</h4>
-              <div className="flex flex-col gap-3">
-                <Link href="#" style={footerLinkStyle}>
-                  Create Package
-                </Link>
-                <Link href="#" style={footerLinkStyle}>
-                  Browse Registry
-                </Link>
-                <Link href="#" style={footerLinkStyle}>
-                  Pricing
-                </Link>
-              </div>
-            </div>
-            <div className="flex flex-col">
-              <h4 style={footerHeadingStyle}>Company</h4>
-              <div className="flex flex-col gap-3">
-                <Link href="#" style={footerLinkStyle}>
-                  About Us
-                </Link>
-                <Link href="#" style={footerLinkStyle}>
-                  Blog
-                </Link>
-                <Link href="#" style={footerLinkStyle}>
-                  Contact
-                </Link>
-              </div>
-            </div>
-            <div className="flex flex-col">
-              <h4 style={footerHeadingStyle}>Support & Legal</h4>
-              <div className="flex flex-col gap-3">
-                <Link href="#" style={footerLinkStyle}>
-                  GitHub
-                </Link>
-                <Link href="#" style={footerLinkStyle}>
-                  Discord
-                </Link>
-              </div>
-            </div>
-          </div>
-          <div className="flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-10 md:flex-row">
-            <p style={{ color: '#A0A5A3', fontSize: 14 }}>
-              © 2024 AgentForge. All rights reserved.
-            </p>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </main>
   )
 }
