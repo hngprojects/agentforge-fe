@@ -132,7 +132,7 @@ export function Footer() {
               <h4 style={footerHeadingStyle}>Company</h4>
               <div className="flex flex-col gap-3">
                 <Link
-                  href="#"
+                  href="/about"
                   style={footerLinkStyle}
                   className="hover:text-white"
                 >
