@@ -184,7 +184,11 @@ export function Hero() {
           </p>
         </div>
 
-        <div aria-hidden className="hidden md:block" style={{ height: '24px' }} />
+        <div
+          aria-hidden
+          className="hidden md:block"
+          style={{ height: '24px' }}
+        />
 
         <div
           className="mx-auto hidden w-full md:flex"
@@ -287,7 +291,11 @@ export function Hero() {
           />
         </div>
 
-        <div aria-hidden className="hidden md:block" style={{ height: '6px' }} />
+        <div
+          aria-hidden
+          className="hidden md:block"
+          style={{ height: '6px' }}
+        />
 
         <div
           className="hidden flex-wrap items-center justify-center md:flex"

@@ -26,13 +26,11 @@ export function Navbar() {
   return (
     <header className="relative w-full bg-white">
       <nav className="mx-auto flex w-full items-center justify-between self-stretch px-6 py-4 md:px-20 md:py-5">
-        
         <Link
           href="/"
           className="flex items-center outline-hidden focus:outline-hidden focus-visible:outline-hidden"
           style={{ gap: '8px' }}
         >
-          
           <div
             style={{
               display: 'flex',
@@ -61,9 +59,8 @@ export function Navbar() {
             </svg>
           </div>
 
-          
           <span
-            className="leading-none font-bold text-[14.196px] min-[973px]:text-[24px]"
+            className="text-[14.196px] leading-none font-bold min-[973px]:text-[24px]"
             style={{
               color: '#0C0E0D',
               fontFamily: 'Inter',
@@ -74,7 +71,6 @@ export function Navbar() {
           </span>
         </Link>
 
-        
         <ul
           className="hidden items-center min-[973px]:flex"
           style={{ gap: '32px' }}
@@ -108,9 +104,7 @@ export function Navbar() {
           </li>
         </ul>
 
-        
         <div className="flex items-center" style={{ gap: '12px' }}>
-          
           <AuthDialog
             trigger={
               <Button
@@ -135,7 +129,7 @@ export function Navbar() {
               </Button>
             }
           />
-          
+
           <AuthDialog
             trigger={
               <Button
@@ -160,7 +154,6 @@ export function Navbar() {
             }
           />
 
-          
           <button
             className="flex h-9 w-9 items-center justify-center rounded-lg bg-gray-50 min-[973px]:hidden"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -195,7 +188,6 @@ export function Navbar() {
         </div>
       </nav>
 
-      
       {isMobileMenuOpen && (
         <div className="absolute top-full left-0 z-50 flex w-full flex-col border-b border-zinc-200 bg-white px-6 py-4 shadow-lg min-[973px]:hidden">
           <ul className="flex flex-col gap-4">

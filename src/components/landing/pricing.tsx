@@ -60,7 +60,6 @@ export function Pricing() {
         className="mx-auto flex w-full flex-col items-center"
         style={{ maxWidth: '1200px', gap: '64px' }}
       >
-        
         <div className="flex flex-col items-center gap-4 text-center">
           <div
             className="inline-flex items-center"
@@ -99,9 +98,7 @@ export function Pricing() {
           </h2>
         </div>
 
-        
         <div className="flex w-full flex-col flex-wrap items-center justify-center gap-8 md:flex-row lg:gap-12">
-          
           <div
             style={
               {
@@ -163,7 +160,6 @@ export function Pricing() {
             </div>
           </div>
 
-          
           <div
             style={
               {

@@ -175,12 +175,14 @@ const MOBILE_STEPS = [
   {
     icon: <GridIconMobile />,
     title: 'Describe the setup',
-    description: 'Tell Anvila the role, tone, rules, and tasks your agent needs.',
+    description:
+      'Tell Anvila the role, tone, rules, and tasks your agent needs.',
   },
   {
     icon: <ClipboardPencilIconMobile />,
     title: 'Scaffold the files',
-    description: 'Anvila drafts the personality files, README, and pacakage structure.',
+    description:
+      'Anvila drafts the personality files, README, and pacakage structure.',
   },
   {
     icon: <AtomIconMobile />,
@@ -191,10 +193,7 @@ const MOBILE_STEPS = [
 
 export function HowItWorks() {
   return (
-    <section
-      className="relative w-full"
-      style={{ backgroundColor: '#FBFBFB' }}
-    >
+    <section className="relative w-full" style={{ backgroundColor: '#FBFBFB' }}>
       <div
         className="mx-auto flex w-full flex-col items-center px-6 py-12 md:px-20 md:py-16"
         style={{
