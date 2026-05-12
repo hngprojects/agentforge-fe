@@ -1,0 +1,160 @@
+name: Staging Deployment
+on:
+  workflow_dispatch:
+  workflow_run:
+    workflows: ["Build and Upload"]
+    types:
+      - completed
+
+concurrency:
+  group: deploy-frontend-staging
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    # workflow_dispatch has no built-in branch filter — GitHub lets users pick any
+    if: |
+      (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/staging') ||
+      github.event.workflow_run.conclusion == 'success'
+
+    environment:
+      name: "staging"
+      url: "https://staging.agent-forge.hng14.com"
+
+    steps:
+    - name: Resolve build run ID
+      id: resolve-run
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+          echo "Manual trigger detected — looking up latest successful build run on staging..."
+          RUN_ID=$(gh run list \
+            --repo "${{ github.repository }}" \
+            --workflow="build-and-upload.yml" \
+            --branch=staging \
+            --status=success \
+            --limit=1 \
+            --json databaseId \
+            --jq '.[0].databaseId')
+
+          if [ -z "$RUN_ID" ] || [ "$RUN_ID" = "null" ]; then
+            echo "❌ No successful 'Build and Upload' run found on staging. Push a commit to staging first."
+            exit 1
+          fi
+          echo "✅ Resolved run ID: $RUN_ID"
+          echo "run_id=$RUN_ID" >> "$GITHUB_OUTPUT"
+        else
+          echo "Automated trigger — using workflow_run ID: ${{ github.event.workflow_run.id }}"
+          echo "run_id=${{ github.event.workflow_run.id }}" >> "$GITHUB_OUTPUT"
+        fi
+
+    - name: Download build artifact
+      uses: actions/download-artifact@v4
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        run-id: ${{ steps.resolve-run.outputs.run_id }}
+        name: agentforge-build
+        path: .
+
+    - name: Decode and create .env file
+      run: |
+        echo "${{ secrets.STAGING_ENV_BASE64 }}" | base64 -d > .env
+
+    - name: Debug SSH key format
+      run: |
+        KEY="${{ secrets.SSH_PRIVATE_KEY }}"
+        FIRST_LINE=$(echo "$KEY" | head -1)
+        LAST_LINE=$(echo "$KEY" | tail -1)
+        LINE_COUNT=$(echo "$KEY" | wc -l)
+
+        echo "--- SSH Key Diagnostics ---"
+        echo "First line : $FIRST_LINE"
+        echo "Last line  : $LAST_LINE"
+        echo "Line count : $LINE_COUNT"
+
+        # Fail fast with a clear message if the key header is wrong
+        if [[ "$FIRST_LINE" != "-----BEGIN"* ]]; then
+          echo "❌ SSH key does not start with '-----BEGIN'. Key was likely pasted incorrectly or is corrupted."
+          exit 1
+        fi
+        if [[ "$LAST_LINE" != "-----END"* ]]; then
+          echo "❌ SSH key does not end with '-----END'. Key may be truncated or missing a trailing newline."
+          exit 1
+        fi
+        if [ "$LINE_COUNT" -lt 3 ]; then
+          echo "❌ SSH key has fewer than 3 lines — it is almost certainly malformed."
+          exit 1
+        fi
+        echo "✅ SSH key format looks valid."
+
+    - name: Copy to server
+      uses: appleboy/scp-action@v0.1.7
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        source: ".env,agentforge-build.tar.gz"
+        target: "~/agentforge/frontend/staging"
+
+    - name: Delete local artifacts
+      run: rm -f agentforge-build.tar.gz .env
+
+    - name: Deploy on server
+      uses: appleboy/ssh-action@v1.2.5
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        script_stop: true
+        script: |
+          set -e
+
+          echo "=== Deploying Frontend Staging ==="
+          cd ~/agentforge/frontend/staging
+
+          # Extract build artifacts
+          tar -xzf agentforge-build.tar.gz
+          rm -f agentforge-build.tar.gz
+
+          # Install production dependencies
+          # --ignore-scripts prevents lifecycle hooks (e.g. husky prepare) from
+          # running on the server. devDependencies are skipped in --prod mode, so
+          # any hook that depends on them (like husky) would crash the install.
+          pnpm install --prod --ignore-scripts
+
+          # Snapshot PM2 state for rollback
+          pm2 save || true
+
+          # Restart application
+          echo "=== Starting PM2 Process ==="
+          if pm2 describe frontend-staging > /dev/null 2>&1; then
+            pm2 restart frontend-staging --update-env
+          else
+            pm2 start "pnpm start" --name frontend-staging
+          fi
+
+          # Health check with retry
+          echo "=== Running Health Check ==="
+          MAX_RETRIES=15
+          RETRY_COUNT=0
+
+          while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
+            if curl -sf "http://localhost:3000/" > /dev/null 2>&1; then
+              echo "✅ Health check passed after $((RETRY_COUNT + 1)) attempt(s)"
+              break
+            fi
+            RETRY_COUNT=$((RETRY_COUNT + 1))
+            echo "⏳ Health check attempt ${RETRY_COUNT}/${MAX_RETRIES} failed, retrying in 2s..."
+            sleep 2
+          done
+
+          if [ $RETRY_COUNT -eq $MAX_RETRIES ]; then
+            echo "❌ Health check failed. Rolling back..."
+            pm2 resurrect || pm2 start "pnpm start" --name frontend-staging
+            echo "❌ Deployment FAILED - health check did not pass."
+            exit 1
+          fi
+
+          echo "=== Frontend Staging Deployment Complete ==="

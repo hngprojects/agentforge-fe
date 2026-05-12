@@ -1,30 +1,47 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { cookies } from 'next/headers'
+
+const AUTH_ROUTES = ['/login', '/register', '/forgot-password']
+const PUBLIC_ROUTES = [
+  '/login',
+  '/register',
+  '/forgot-password',
+  '/verify-email',
+  '/confirm-email',
+  '/auth/callback/google',
+  '/auth/callback/github',
+  '/reset-password',
+  '/explore',
+  '/pricing',
+]
 
 export default async function proxy(request: NextRequest) {
-  const { nextUrl } = request
-  const cookieStore = await cookies()
+  const { pathname } = request.nextUrl
+  const refreshToken = request.cookies.get('refresh_token')?.value
 
-  const token = cookieStore.get('access_token')
-  const isLoggedIn = !!token
+  const isAuthRoute = AUTH_ROUTES.some((r) => pathname.startsWith(r))
+  const isPublicRoute =
+    pathname === '/' || PUBLIC_ROUTES.some((r) => pathname.startsWith(r))
 
-  const isProtectedRoute =
-    nextUrl.pathname.startsWith('/dashboard') ||
-    nextUrl.pathname.startsWith('/admin')
-  const isAuthRoute =
-    nextUrl.pathname === '/login' || nextUrl.pathname === '/register'
+  if (refreshToken && isAuthRoute) {
+    return NextResponse.redirect(new URL('/generator', request.url))
+  }
 
-  if (isProtectedRoute && !isLoggedIn) {
+  if (!refreshToken && !isPublicRoute) {
     return NextResponse.redirect(new URL('/login', request.url))
   }
 
-  if (isAuthRoute && isLoggedIn) {
-    return NextResponse.redirect(new URL('/dashboard', request.url))
+  const response = NextResponse.next()
+
+  if (!isPublicRoute) {
+    response.headers.set(
+      'Cache-Control',
+      'no-store, max-age=0, must-revalidate'
+    )
   }
 
-  return NextResponse.next()
+  return response
 }
 
 export const config = {
-  matcher: ['/((?!.+\\.[\\w]+$|_next).*)', '/', '/(api|trpc)(.*)'],
+  matcher: ['/((?!_next/static|_next/image|favicon.ico|.*\\..*|api/).*)'],
 }
