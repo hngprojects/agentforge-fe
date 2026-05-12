@@ -66,7 +66,7 @@ export async function refresh(): Promise<AccessTokenResponse> {
 //   router.push("/login");
 // ---------------------------------------------------------------------------
 export async function logout(): Promise<MessageResponse> {
-  const res = await authClient.post('/auth/logout')
+  const res = await publicClient.post('/auth/logout')
   return MessageResponseSchema.parse(res.data)
 }
 

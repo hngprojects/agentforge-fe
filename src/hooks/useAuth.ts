@@ -1,7 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useRef } from 'react'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { useAuthStore } from '@/stores/auth-store'
 import { login, logout, register, getMe, refresh } from '@/lib/api/auth'
 import type { LoginInput, RegisterInput } from '@/schemas/auth'
@@ -28,14 +28,27 @@ import { AxiosError } from 'axios'
  * const { logout } = useAuth();
  * <button onClick={logout}>Sign out</button>
  */
+
+const PUBLIC_PATHS = [
+  '/',
+  '/login',
+  '/register',
+  '/reset-password',
+  '/forgot-password',
+  '/verify-email',
+  '/confirm-email',
+]
+
 export function useAuth() {
   const router = useRouter()
   const { accessToken, user, isAuthenticated, setAccessToken, setUser, clear } =
     useAuthStore()
+  const pathname = usePathname()
   const hydrated = useRef(false)
 
   useEffect(() => {
-    if (hydrated.current || isAuthenticated) return
+    const isPublicPath = PUBLIC_PATHS.some((path) => pathname.startsWith(path))
+    if (hydrated.current || isAuthenticated || isPublicPath) return
     hydrated.current = true
 
     refresh()
@@ -51,9 +64,20 @@ export function useAuth() {
         // here since we don't store it, so just redirect without the param.
         if (err instanceof AxiosError && err.response?.status === 403) {
           router.push('/confirm-email')
+        } else {
+          logout()
+          router.push('/login')
         }
       })
-  }, [isAuthenticated, setAccessToken, setUser, clear, router])
+  }, [
+    isAuthenticated,
+    setAccessToken,
+    setUser,
+    clear,
+    router,
+    pathname,
+    accessToken,
+  ])
 
   const handleRegister = useCallback(async (data: RegisterInput) => {
     return register(data)
@@ -75,8 +99,9 @@ export function useAuth() {
       await logout()
     } finally {
       clear()
+      router.push('/login')
     }
-  }, [clear])
+  }, [clear, router])
 
   return {
     user,

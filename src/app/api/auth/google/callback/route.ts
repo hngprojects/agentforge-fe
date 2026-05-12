@@ -1,22 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-const BACKEND = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000'
+const BACKEND = process.env.BACKEND_URL ?? 'http://localhost:8000'
 
-export async function GET(request: NextRequest) {
-  const search = request.nextUrl.search
+export async function POST(request: NextRequest) {
+  const body = await request.text()
 
-  const cookieHeader = request.headers.get('cookie') ?? ''
-
-  const backendRes = await fetch(
-    `${BACKEND}/api/v1/auth/google/callback${search}`,
-    {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        cookie: cookieHeader, // ← this is what was missing
-      },
-    }
-  )
+  const backendRes = await fetch(`${BACKEND}/api/v1/auth/google/callback`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body,
+  })
 
   const data = await backendRes.json()
   const response = NextResponse.json(data, { status: backendRes.status })
