@@ -1,5 +1,6 @@
 import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios'
-import { BACKEND_URL } from '@/utils/consts'
+
+const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000'
 
 // Public client — no auth, used for login/register/refresh calls
 export const publicClient = axios.create({

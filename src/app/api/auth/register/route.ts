@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { BACKEND_URL } from '@/utils/consts'
+
+const BACKEND = process.env.BACKEND_URL ?? 'http://localhost:8000'
 
 export async function POST(request: NextRequest) {
   const body = await request.text()

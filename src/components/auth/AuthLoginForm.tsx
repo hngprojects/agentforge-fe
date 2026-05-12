@@ -107,7 +107,7 @@ export const AuthLoginForm = () => {
       <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-4">
         {/* Email */}
         <div className="space-y-1">
-          <label htmlFor="email" className="text-xs font-medium text-black">
+          <label htmlFor="email" className="text-[16px] font-medium text-black">
             Email
           </label>
           <div className="relative">
@@ -118,7 +118,7 @@ export const AuthLoginForm = () => {
               aria-invalid={!!errors.email}
               aria-describedby={errors.email ? 'email-error' : undefined}
               {...register('email')}
-              className={`w-full rounded-md border bg-white px-3 py-2.5 pr-9 text-sm transition-colors outline-none placeholder:text-gray-300 ${
+              className={`w-full rounded-md border bg-white px-3 py-2.5 pr-9 text-[16px] transition-colors outline-none placeholder:text-gray-300 ${
                 errors.email
                   ? 'border-red-400 focus:border-red-400'
                   : emailValid
@@ -141,7 +141,10 @@ export const AuthLoginForm = () => {
 
         {/* Password */}
         <div className="space-y-1">
-          <label htmlFor="password" className="text-xs font-medium text-black">
+          <label
+            htmlFor="password"
+            className="text-[16px] font-medium text-black"
+          >
             Password
           </label>
           <div className="relative">
@@ -152,7 +155,7 @@ export const AuthLoginForm = () => {
               aria-invalid={!!errors.password}
               aria-describedby={errors.password ? 'password-error' : undefined}
               {...register('password')}
-              className={`w-full rounded-md border bg-white px-3 py-2.5 pr-9 text-sm transition-colors outline-none placeholder:text-gray-300 ${
+              className={`w-full rounded-md border bg-white px-3 py-2.5 pr-9 text-[16px] transition-colors outline-none placeholder:text-gray-300 ${
                 errors.password
                   ? 'border-red-400 focus:border-red-400'
                   : 'border-gray-300 focus:border-teal-500'
@@ -197,7 +200,7 @@ export const AuthLoginForm = () => {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full rounded-md bg-teal-800 py-2.5 text-sm font-medium text-white transition-colors hover:bg-teal-900 disabled:opacity-60"
+          className="w-full rounded-md bg-teal-800 py-2.5 text-[16px] font-medium text-white transition-colors hover:bg-teal-900 disabled:opacity-60"
         >
           {isSubmitting ? 'Signing in...' : 'Continue'}
         </button>

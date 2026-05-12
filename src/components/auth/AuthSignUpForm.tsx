@@ -37,9 +37,32 @@ export const AuthSignUpForm = () => {
     handleSubmit,
     setError,
     formState: { errors, isSubmitting },
-  } = useForm<RegisterInput>({ resolver: zodResolver(RegisterSchema) })
+  } = useForm<RegisterInput>({
+    resolver: zodResolver(RegisterSchema),
+    mode: 'onChange', // ← live validation for confirmPassword mismatch
+  })
 
   const showPwRules = pwTouched && pwValue.length > 0 && !submitted
+
+  // Strength — Strong only when all 4 rules pass
+  const score = PW_RULES.filter((r) => r.test(pwValue)).length
+  const strengthLabel = ['', 'Weak', 'Fair', 'Good', 'Strong'][score]
+  const strengthColor =
+    score <= 1
+      ? 'bg-red-400'
+      : score === 2
+        ? 'bg-orange-400'
+        : score === 3
+          ? 'bg-yellow-400'
+          : 'bg-teal-500'
+  const strengthTextColor =
+    score <= 1
+      ? 'text-red-400'
+      : score === 2
+        ? 'text-orange-400'
+        : score === 3
+          ? 'text-yellow-500'
+          : 'text-teal-600'
 
   const onSubmit = async (data: RegisterInput) => {
     if (!agreed) {
@@ -101,7 +124,7 @@ export const AuthSignUpForm = () => {
         <div className="space-y-1">
           <label
             htmlFor="display_name"
-            className="text-xs font-medium text-black"
+            className="text-[16px] font-medium text-black"
           >
             Full name
           </label>
@@ -111,7 +134,7 @@ export const AuthSignUpForm = () => {
             autoComplete="name"
             placeholder="Enter full name"
             {...register('display_name')}
-            className={`w-full rounded-md border bg-white px-3 py-2.5 text-sm transition-colors outline-none placeholder:text-gray-300 ${errors.display_name ? 'border-red-400 focus:border-red-400' : 'border-gray-300 focus:border-teal-500'}`}
+            className={`w-full rounded-md border bg-white px-3 py-2.5 text-[16px] transition-colors outline-none placeholder:text-gray-300 ${errors.display_name ? 'border-red-400 focus:border-red-400' : 'border-gray-300 focus:border-teal-500'}`}
           />
           {errors.display_name && (
             <p className="text-xs text-red-500">
@@ -122,7 +145,7 @@ export const AuthSignUpForm = () => {
 
         {/* Email */}
         <div className="space-y-1">
-          <label htmlFor="email" className="text-xs font-medium text-black">
+          <label htmlFor="email" className="text-[16px] font-medium text-black">
             Email
           </label>
           <input
@@ -131,7 +154,7 @@ export const AuthSignUpForm = () => {
             autoComplete="email"
             placeholder="Enter email address"
             {...register('email')}
-            className={`w-full rounded-md border bg-white px-3 py-2.5 text-sm transition-colors outline-none placeholder:text-gray-300 ${errors.email ? 'border-red-400 focus:border-red-400' : 'border-gray-300 focus:border-teal-500'}`}
+            className={`w-full rounded-md border bg-white px-3 py-2.5 text-[16px] transition-colors outline-none placeholder:text-gray-300 ${errors.email ? 'border-red-400 focus:border-red-400' : 'border-gray-300 focus:border-teal-500'}`}
           />
           {errors.email && (
             <p className="text-xs text-red-500">{errors.email.message}</p>
@@ -140,7 +163,10 @@ export const AuthSignUpForm = () => {
 
         {/* Password */}
         <div className="space-y-1">
-          <label htmlFor="password" className="text-xs font-medium text-black">
+          <label
+            htmlFor="password"
+            className="text-[16px] font-medium text-black"
+          >
             Password
           </label>
           <div className="relative">
@@ -156,7 +182,7 @@ export const AuthSignUpForm = () => {
                 },
               })}
               onFocus={() => setPwTouched(true)}
-              className={`w-full rounded-md border bg-white px-3 py-2.5 pr-9 text-sm transition-colors outline-none placeholder:text-gray-300 ${errors.password ? 'border-red-400 focus:border-red-400' : 'border-gray-300 focus:border-teal-500'}`}
+              className={`w-full rounded-md border bg-white px-3 py-2.5 pr-9 text-[16px] transition-colors outline-none placeholder:text-gray-300 ${errors.password ? 'border-red-400 focus:border-red-400' : 'border-gray-300 focus:border-teal-500'}`}
             />
             <button
               type="button"
@@ -168,32 +194,67 @@ export const AuthSignUpForm = () => {
             </button>
           </div>
 
-          {/* Live password rules */}
-          {showPwRules && (
-            <div className="mt-2 space-y-1">
-              {PW_RULES.map((rule) => {
-                const passing = rule.test(pwValue)
-                return (
-                  <div key={rule.label} className="flex items-center gap-1.5">
-                    {passing ? (
-                      <Check
-                        size={11}
-                        className="text-teal-600"
-                        strokeWidth={2.5}
-                      />
-                    ) : (
-                      <X size={11} className="text-red-400" strokeWidth={2.5} />
-                    )}
-                    <span
-                      className={`text-xs ${passing ? 'text-teal-600' : 'text-red-400'}`}
-                    >
-                      {rule.label}
-                    </span>
-                  </div>
-                )
-              })}
+          {/* Strength meter + rules */}
+          {pwTouched && pwValue.length > 0 && (
+            <div className="mt-2 space-y-1.5">
+              {/* 4-segment bar + label */}
+              <div className="flex items-center gap-1.5">
+                {[1, 2, 3, 4].map((i) => (
+                  <div
+                    key={i}
+                    className={`h-1 flex-1 rounded-full transition-all duration-300 ${score >= i ? strengthColor : 'bg-gray-200'}`}
+                  />
+                ))}
+                {strengthLabel && (
+                  <span
+                    className={`ml-1 min-w-[42px] text-right text-xs font-medium ${strengthTextColor}`}
+                  >
+                    {strengthLabel}
+                  </span>
+                )}
+              </div>
+
+              {/* Checklist — only while typing, before submit */}
+              {showPwRules && (
+                <div className="space-y-1">
+                  <p className="text-xs text-gray-400">
+                    {score === 4
+                      ? 'Strong password ✓'
+                      : 'Weak password. Must contain:'}
+                  </p>
+                  {PW_RULES.map((rule) => {
+                    const passing = rule.test(pwValue)
+                    return (
+                      <div
+                        key={rule.label}
+                        className="flex items-center gap-1.5"
+                      >
+                        {passing ? (
+                          <Check
+                            size={11}
+                            className="text-teal-600"
+                            strokeWidth={2.5}
+                          />
+                        ) : (
+                          <X
+                            size={11}
+                            className="text-red-400"
+                            strokeWidth={2.5}
+                          />
+                        )}
+                        <span
+                          className={`text-xs ${passing ? 'text-teal-600' : 'text-red-400'}`}
+                        >
+                          {rule.label}
+                        </span>
+                      </div>
+                    )
+                  })}
+                </div>
+              )}
             </div>
           )}
+
           {!showPwRules && errors.password && (
             <p className="text-xs text-red-500">{errors.password.message}</p>
           )}
@@ -203,7 +264,7 @@ export const AuthSignUpForm = () => {
         <div className="space-y-1">
           <label
             htmlFor="confirmPassword"
-            className="text-xs font-medium text-black"
+            className="text-[16px] font-medium text-black"
           >
             Confirm password
           </label>
@@ -214,7 +275,7 @@ export const AuthSignUpForm = () => {
               autoComplete="new-password"
               placeholder="Confirm your password"
               {...register('confirmPassword')}
-              className={`w-full rounded-md border bg-white px-3 py-2.5 pr-9 text-sm transition-colors outline-none placeholder:text-gray-300 ${errors.confirmPassword ? 'border-red-400 focus:border-red-400' : 'border-gray-300 focus:border-teal-500'}`}
+              className={`w-full rounded-md border bg-white px-3 py-2.5 pr-9 text-[16px] transition-colors outline-none placeholder:text-gray-300 ${errors.confirmPassword ? 'border-red-400 focus:border-red-400' : 'border-gray-300 focus:border-teal-500'}`}
             />
             <button
               type="button"
@@ -253,7 +314,7 @@ export const AuthSignUpForm = () => {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full rounded-md bg-teal-800 py-2.5 text-sm font-medium text-white transition-colors hover:bg-teal-900 disabled:opacity-60"
+          className="w-full rounded-md bg-teal-800 py-2.5 text-[16px] font-medium text-white transition-colors hover:bg-teal-900 disabled:opacity-60"
         >
           {isSubmitting ? 'Creating account…' : 'Sign up'}
         </button>
@@ -265,7 +326,7 @@ export const AuthSignUpForm = () => {
       </div>
 
       {/* Sign in */}
-      <p className="mt-4 text-center text-xs text-black">
+      <p className="mt-4 text-center text-[16px] text-black">
         Already have an account?{' '}
         <Link
           href="/login"
