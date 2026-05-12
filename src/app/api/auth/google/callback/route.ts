@@ -5,7 +5,7 @@ const BACKEND = process.env.BACKEND_URL ?? 'http://localhost:8000'
 export async function POST(request: NextRequest) {
   const body = await request.text()
 
-  const backendRes = await fetch(`${BACKEND}/api/v1/auth/google/callback`, {
+  const backendRes = await fetch(`${BACKEND_URL}/api/v1/auth/google/callback`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body,

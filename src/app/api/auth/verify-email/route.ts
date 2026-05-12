@@ -10,7 +10,7 @@ export async function GET(request: NextRequest) {
   }
 
   const backendRes = await fetch(
-    `${BACKEND}/api/v1/auth/verify-email?token=${encodeURIComponent(token)}`,
+    `${BACKEND_URL}/api/v1/auth/verify-email?token=${encodeURIComponent(token)}`,
     { method: 'GET' }
   )
 
