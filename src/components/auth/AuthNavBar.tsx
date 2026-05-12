@@ -9,8 +9,8 @@ export const AuthNavBar = () => {
       >
         <div className="flex h-9 w-9 items-center justify-center rounded-full bg-teal-800">
           <svg
-            width="20"
-            height="20"
+            width="44"
+            height="44"
             viewBox="0 0 44 44"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"

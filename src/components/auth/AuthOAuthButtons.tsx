@@ -28,7 +28,7 @@ export const AuthOAuthButtons = () => {
             onClick={() => {
               window.location.href = `/api/auth/${provider}`
             }}
-            className="flex items-center justify-center rounded-md border border-gray-200 py-2.5 transition-all hover:border-teal-500 hover:shadow-[0_0_0_3px_rgba(20,184,166,0.1)]"
+            className="flex items-center justify-center rounded-md border border-gray-200 py-2.5 transition-all"
           >
             <Icon />
           </button>

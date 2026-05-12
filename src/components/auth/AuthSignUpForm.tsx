@@ -317,7 +317,7 @@ export const AuthSignUpForm = () => {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full rounded-md bg-teal-800 py-2.5 text-[16px] font-medium text-white transition-colors hover:bg-teal-900 disabled:opacity-60"
+          className="w-full rounded-md bg-[#004C48] py-2.5 text-[16px] font-medium text-white transition-colors disabled:opacity-60"
         >
           {isSubmitting ? 'Creating account…' : 'Sign up'}
         </button>
