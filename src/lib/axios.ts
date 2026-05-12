@@ -1,23 +1,17 @@
 import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios'
 
-const BACKEND_URL =
-  process.env.NEXT_PUBLIC_API_URL ?? 'https://api.staging.agent-forge.hng14.com'
-
-// Public client — no auth, used for login/register/refresh calls
 export const publicClient = axios.create({
-  baseURL: '/api', // hits Next.js routes above
+  baseURL: '/api',
   headers: { 'Content-Type': 'application/json' },
   withCredentials: true,
 })
 
-// Auth client — injects access token, silently refreshes on 401
 export const authClient = axios.create({
-  baseURL: `${BACKEND_URL}/api/v1`,
+  baseURL: '/api',
   headers: { 'Content-Type': 'application/json' },
   withCredentials: true,
 })
 
-// Lazy import to avoid circular deps (store imports axios, axios imports store)
 function getAccessToken(): string | null {
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   const { useAuthStore } = require('@/stores/auth-store')
@@ -36,7 +30,6 @@ function clearAuth(): void {
   useAuthStore.getState().clear()
 }
 
-// Request interceptor — attach Bearer token
 authClient.interceptors.request.use((config: InternalAxiosRequestConfig) => {
   const token = getAccessToken()
   if (token) {
@@ -45,8 +38,6 @@ authClient.interceptors.request.use((config: InternalAxiosRequestConfig) => {
   return config
 })
 
-// Response interceptor — on 401, hit the Next.js refresh route handler,
-// update the store, and replay the original request once.
 let isRefreshing = false
 let queue: Array<{
   resolve: (token: string) => void
@@ -73,7 +64,6 @@ authClient.interceptors.response.use(
     }
 
     if (isRefreshing) {
-      // Queue concurrent requests while a refresh is in flight
       return new Promise((resolve, reject) => {
         queue.push({ resolve, reject })
       }).then((token) => {
@@ -86,8 +76,6 @@ authClient.interceptors.response.use(
     isRefreshing = true
 
     try {
-      // Call the Next.js route handler which proxies to the backend
-      // and re-sets the access token cookie server-side
       const { data } = await publicClient.post<{ access_token: string }>(
         '/auth/refresh'
       )
@@ -102,7 +90,7 @@ authClient.interceptors.response.use(
       processQueue(refreshError, null)
       clearAuth()
       if (typeof window !== 'undefined') {
-        window.location.href = '/login'
+        window.location.replace('/login')
       }
       return Promise.reject(refreshError)
     } finally {

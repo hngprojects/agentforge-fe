@@ -38,3 +38,8 @@ next-env.d.ts
 .env
 tsconfig.tsbuildinfo
 .eslintcache
+
+# ai agents
+AGENTS.md
+GEMINI.md
+/.agents

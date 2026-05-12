@@ -49,9 +49,24 @@ export const UserSchema = z.object({
   github_username: z.string().nullable(),
 })
 
+export const resetPasswordSchema = z
+  .object({
+    password: z
+      .string()
+      .min(8, 'Password must be at least 8 characters')
+      .regex(/[A-Z]/, 'Password must contain at least one uppercase letter')
+      .regex(/[0-9]/, 'Password must contain at least one number'),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ['confirmPassword'],
+  })
+
 // Inferred types
 export type RegisterInput = z.infer<typeof RegisterSchema>
 export type LoginInput = z.infer<typeof LoginSchema>
 export type AccessTokenResponse = z.infer<typeof AccessTokenResponseSchema>
 export type MessageResponse = z.infer<typeof MessageResponseSchema>
 export type User = z.infer<typeof UserSchema>
+export type ResetPasswordData = z.infer<typeof resetPasswordSchema>
