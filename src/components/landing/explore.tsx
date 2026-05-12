@@ -227,12 +227,10 @@ export function Explore() {
         </p>
       </section>
 
-      {/* ── Category Tabs + Cards ── */}
       <section
         className="mx-auto w-full px-6 pb-20 md:px-10 xl:px-20"
         style={{ maxWidth: '1280px' }}
       >
-        {/* Tabs */}
         <div
           className="mb-10 flex flex-wrap gap-2 border-b"
           style={{ borderColor: '#E4E4E7' }}
@@ -263,7 +261,6 @@ export function Explore() {
           ))}
         </div>
 
-        {/* Cards Grid */}
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {filteredAgents.map((agent, idx) => (
             <div
@@ -275,7 +272,6 @@ export function Explore() {
                 height: '280px',
               }}
             >
-              {/* Top */}
               <div className="flex flex-col gap-3">
                 <GitHubIcon />
                 <h3
@@ -304,7 +300,6 @@ export function Explore() {
                 </p>
               </div>
 
-              {/* Tags */}
               <div className="hide_scrollbar mt-4 flex flex-nowrap gap-2 overflow-x-auto">
                 {agent.tags.map((tag) => (
                   <span
@@ -420,7 +415,6 @@ export function Explore() {
         </button>
       </section>
 
-      {/* ── Footer (matches Explore page Figma) ── */}
       <footer
         className="w-full"
         style={{ background: '#0C5D56', padding: '40px 80px 40px 80px' }}
@@ -433,7 +427,6 @@ export function Explore() {
             className="flex flex-col gap-12 lg:grid lg:gap-12"
             style={{ gridTemplateColumns: '1.5fr 1fr 1fr 1fr' }}
           >
-            {/* Brand Column */}
             <div className="flex max-w-sm flex-col gap-6">
               <div className="flex items-center gap-2">
                 <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white">
@@ -506,7 +499,6 @@ export function Explore() {
               </div>
             </div>
 
-            {/* Our Services */}
             <div className="flex flex-col">
               <h4 style={footerHeadingStyle}>Our Services</h4>
               <div className="flex flex-col gap-3">
@@ -548,7 +540,6 @@ export function Explore() {
               </div>
             </div>
 
-            {/* Company */}
             <div className="flex flex-col">
               <h4 style={footerHeadingStyle}>Company</h4>
               <div className="flex flex-col gap-3">
@@ -590,7 +581,6 @@ export function Explore() {
               </div>
             </div>
 
-            {/* Support & Legal */}
             <div className="flex flex-col">
               <h4 style={footerHeadingStyle}>Support & Legal</h4>
               <div className="flex flex-col gap-3">
@@ -633,7 +623,6 @@ export function Explore() {
             </div>
           </div>
 
-          {/* Bottom Bar */}
           <div className="flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-10 md:flex-row">
             <p style={{ color: '#A0A5A3', fontSize: '14px' }}>
               © 2024 AgentForge. All rights reserved.

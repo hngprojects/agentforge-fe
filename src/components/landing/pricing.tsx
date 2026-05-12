@@ -60,7 +60,6 @@ export function Pricing() {
         className="mx-auto flex w-full flex-col items-center"
         style={{ maxWidth: '1200px', gap: '64px' }}
       >
-        {/* Section Header */}
         <div className="flex flex-col items-center gap-4 text-center">
           <div
             className="inline-flex items-center"
@@ -99,9 +98,7 @@ export function Pricing() {
           </h2>
         </div>
 
-        {/* Pricing Cards */}
         <div className="flex w-full flex-col flex-wrap items-center justify-center gap-8 md:flex-row lg:gap-12">
-          {/* Free Card */}
           <div
             style={
               {
@@ -116,7 +113,7 @@ export function Pricing() {
             </div>
             <div
               className="flex flex-1 flex-col bg-white p-8 shadow-sm"
-              style={{ borderRadius: '18px' }} // Slightly less than 20px to fit inside with 2px padding
+              style={{ borderRadius: '18px' }}
             >
               <div className="mb-8">
                 <div className="flex items-baseline gap-2">
@@ -163,7 +160,6 @@ export function Pricing() {
             </div>
           </div>
 
-          {/* Professional Card */}
           <div
             style={
               {
