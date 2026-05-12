@@ -90,10 +90,10 @@ export function Footer() {
                   className="size-6"
                 />
               </div>
-              <span className="text-2xl font-bold text-white">AGENTFORGE</span>
+              <span className="text-2xl font-bold text-white">ANVILA</span>
             </div>
             <p>
-              Builders use AgentForge to turn plain descriptions into
+              Builders use Anvila to turn plain descriptions into
               publishing-ready agent setup packages that can be reused, cloned,
               and adapted for free.
             </p>
@@ -167,7 +167,7 @@ export function Footer() {
 
         {/* Bottom Bar */}
         <div className="flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-10 md:flex-row">
-          <p className="text-sm">© 2024 AgentForge. All rights reserved.</p>
+          <p className="text-sm">© 2024 Anvila. All rights reserved.</p>
           <div className="flex gap-8">
             <Link href="#" className="hover:text-white">
               Privacy Policy
