@@ -39,12 +39,11 @@ export const AuthSignUpForm = () => {
     formState: { errors, isSubmitting },
   } = useForm<RegisterInput>({
     resolver: zodResolver(RegisterSchema),
-    mode: 'onChange', // ← live validation for confirmPassword mismatch
+    mode: 'onChange',
   })
 
   const showPwRules = pwTouched && pwValue.length > 0 && !submitted
 
-  // Strength — Strong only when all 4 rules pass
   const score = PW_RULES.filter((r) => r.test(pwValue)).length
   const strengthLabel = ['', 'Weak', 'Fair', 'Good', 'Strong'][score]
   const strengthColor =
@@ -73,7 +72,7 @@ export const AuthSignUpForm = () => {
     setSubmitted(true)
     try {
       await registerUser(data)
-      router.push(`/confirm-email?email=${encodeURIComponent(data.email)}`)
+      router.replace(`/confirm-email?email=${encodeURIComponent(data.email)}`)
     } catch (err: unknown) {
       if (err instanceof AxiosError && err.response?.status === 422) {
         const detail = err.response.data?.detail
@@ -95,7 +94,6 @@ export const AuthSignUpForm = () => {
 
   return (
     <div className="w-full max-w-[460px] overflow-hidden rounded-xl border border-gray-200 bg-gray-100 px-10 py-8 shadow-sm">
-      {/* Back */}
       <button
         type="button"
         onClick={() => router.back()}
@@ -104,7 +102,6 @@ export const AuthSignUpForm = () => {
         <ArrowLeft size={13} /> Back
       </button>
 
-      {/* Heading */}
       <div className="mb-6 space-y-1 text-center">
         <h1 className="text-2xl font-bold text-gray-900">Create account</h1>
         <p className="text-sm text-gray-400">
@@ -112,7 +109,6 @@ export const AuthSignUpForm = () => {
         </p>
       </div>
 
-      {/* Banner error */}
       {bannerError && (
         <div className="mb-4 rounded-md border border-red-200 bg-red-50 px-3 py-2">
           <p className="text-xs text-red-600">{bannerError}</p>
@@ -120,7 +116,6 @@ export const AuthSignUpForm = () => {
       )}
 
       <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-4">
-        {/* Full name */}
         <div className="space-y-1">
           <label
             htmlFor="display_name"
@@ -143,7 +138,6 @@ export const AuthSignUpForm = () => {
           )}
         </div>
 
-        {/* Email */}
         <div className="space-y-1">
           <label htmlFor="email" className="text-[16px] font-medium text-black">
             Email
@@ -161,7 +155,6 @@ export const AuthSignUpForm = () => {
           )}
         </div>
 
-        {/* Password */}
         <div className="space-y-1">
           <label
             htmlFor="password"
@@ -194,10 +187,8 @@ export const AuthSignUpForm = () => {
             </button>
           </div>
 
-          {/* Strength meter + rules */}
           {pwTouched && pwValue.length > 0 && (
             <div className="mt-2 space-y-1.5">
-              {/* 4-segment bar + label */}
               <div className="flex items-center gap-1.5">
                 {[1, 2, 3, 4].map((i) => (
                   <div
@@ -214,7 +205,6 @@ export const AuthSignUpForm = () => {
                 )}
               </div>
 
-              {/* Checklist — only while typing, before submit */}
               {showPwRules && (
                 <div className="space-y-1">
                   <p className="text-xs text-gray-400">
@@ -260,7 +250,6 @@ export const AuthSignUpForm = () => {
           )}
         </div>
 
-        {/* Confirm password */}
         <div className="space-y-1">
           <label
             htmlFor="confirmPassword"
@@ -293,7 +282,6 @@ export const AuthSignUpForm = () => {
           )}
         </div>
 
-        {/* Terms */}
         <label className="flex cursor-pointer items-center gap-2 text-xs text-black">
           <input
             type="checkbox"
@@ -310,7 +298,6 @@ export const AuthSignUpForm = () => {
           </Link>
         </label>
 
-        {/* Submit */}
         <button
           type="submit"
           disabled={isSubmitting}
@@ -320,12 +307,10 @@ export const AuthSignUpForm = () => {
         </button>
       </form>
 
-      {/* OAuth */}
       <div className="mt-4">
         <AuthOAuthButtons />
       </div>
 
-      {/* Sign in */}
       <p className="mt-4 text-center text-[16px] text-black">
         Already have an account?{' '}
         <Link

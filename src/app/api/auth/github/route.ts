@@ -6,7 +6,7 @@ const BACKEND = (
 
 export async function GET() {
   try {
-    const backendRes = await fetch(`${BACKEND}/api/v1/auth/google`)
+    const backendRes = await fetch(`${BACKEND}/api/v1/auth/github`)
     const data = await backendRes.json()
 
     if (!backendRes.ok) {

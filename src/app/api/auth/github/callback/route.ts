@@ -6,18 +6,16 @@ const BACKEND = (
 
 export async function POST(request: NextRequest) {
   try {
-    const refreshToken = request.cookies.get('refresh_token')?.value
+    const body = await request.text()
+    const stateCookie = request.cookies.get('oauth_state')?.value
 
-    if (!refreshToken) {
-      return NextResponse.json({ detail: 'No refresh token' }, { status: 401 })
-    }
-
-    const backendRes = await fetch(`${BACKEND}/api/v1/auth/refresh`, {
+    const backendRes = await fetch(`${BACKEND}/api/v1/auth/github/callback`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        cookie: `refresh_token=${refreshToken}`,
+        ...(stateCookie && { cookie: `oauth_state=${stateCookie}` }),
       },
+      body,
     })
 
     const data = await backendRes.json()
