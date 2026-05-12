@@ -51,7 +51,7 @@ export function AuthDialog({ trigger }: AuthDialogProps) {
       <DialogTrigger asChild>{trigger}</DialogTrigger>
       <DialogContent className="overflow-hidden rounded-[32px] border-none p-0 shadow-2xl sm:max-w-[420px]">
         <div className="flex flex-col items-center bg-white p-8 text-center sm:p-10">
-          {/* Brand Identity */}
+          
           <div className="mb-8 flex flex-col items-center gap-3">
             <div className="relative flex h-12 w-12 items-center justify-center rounded-2xl bg-[#0D5C4E]/5">
               <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#0D5C4E]">
@@ -80,7 +80,7 @@ export function AuthDialog({ trigger }: AuthDialogProps) {
             </span>
           </div>
 
-          {/* Content Header */}
+          
           <DialogHeader className="mb-10 flex flex-col items-center space-y-3">
             <DialogTitle className="text-2xl font-bold tracking-tight text-[#111827] sm:text-3xl">
               Start building smarter.
@@ -90,7 +90,7 @@ export function AuthDialog({ trigger }: AuthDialogProps) {
             </DialogDescription>
           </DialogHeader>
 
-          {/* Authentication Options */}
+          
           <div className="w-full space-y-4">
             <Button
               variant="outline"
@@ -115,7 +115,7 @@ export function AuthDialog({ trigger }: AuthDialogProps) {
             </Button>
           </div>
 
-          {/* Secondary Actions & Footer */}
+          
           <div className="mt-8 flex flex-col items-center gap-5">
             <Link
               href="/login"
