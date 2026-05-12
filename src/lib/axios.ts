@@ -1,6 +1,7 @@
 import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios'
 
-const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000'
+const BACKEND_URL =
+  process.env.NEXT_PUBLIC_API_URL ?? 'https://api.staging.agent-forge.hng14.com'
 
 // Public client — no auth, used for login/register/refresh calls
 export const publicClient = axios.create({
